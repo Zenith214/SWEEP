@@ -22,6 +22,9 @@ class DatabaseSeeder extends Seeder
             RouteSeeder::class,
             ScheduleSeeder::class,
             HolidaySeeder::class,
+            TruckSeeder::class,
+            TruckStatusHistorySeeder::class,
+            AssignmentSeeder::class,
         ]);
     }
 }

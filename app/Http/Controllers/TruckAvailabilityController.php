@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Services\AssignmentService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
 
 class TruckAvailabilityController extends Controller
 {
@@ -53,7 +54,7 @@ class TruckAvailabilityController extends Controller
 
         // Format data for JSON response
         $formattedAvailability = [
-            'operational' => $availability['operational']->map(function ($item) {
+            'operational' => collect($availability['operational'])->map(function ($item) {
                 return [
                     'id' => $item['truck']->id,
                     'truck_number' => $item['truck']->truck_number,
@@ -67,7 +68,7 @@ class TruckAvailabilityController extends Controller
                     ] : null,
                 ];
             }),
-            'maintenance' => $availability['maintenance']->map(function ($item) {
+            'maintenance' => collect($availability['maintenance'])->map(function ($item) {
                 return [
                     'id' => $item['truck']->id,
                     'truck_number' => $item['truck']->truck_number,
@@ -76,7 +77,7 @@ class TruckAvailabilityController extends Controller
                     'notes' => $item['truck']->notes,
                 ];
             }),
-            'out_of_service' => $availability['out_of_service']->map(function ($item) {
+            'out_of_service' => collect($availability['out_of_service'])->map(function ($item) {
                 return [
                     'id' => $item['truck']->id,
                     'truck_number' => $item['truck']->truck_number,

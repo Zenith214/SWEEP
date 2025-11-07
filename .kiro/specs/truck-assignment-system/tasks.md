@@ -496,22 +496,33 @@
     - Show empty state if no upcoming assignments
     - _Requirements: 7.4_
 
-- [ ] 17. Create dashboard alert components
-  - [ ] 17.1 Create unassigned routes alert card
+- [x] 17. Create dashboard alert components
+
+
+
+
+  - [x] 17.1 Create unassigned routes alert card
+
+
     - Build alert card with Amber background
     - Display count of routes without assignments in next 3 days
     - Add "View Unassigned Routes" link
     - Add dismiss button
     - _Requirements: 12.1, 12.3, 12.4, 12.5_
   
-  - [ ] 17.2 Create underutilized trucks alert card
+  - [x] 17.2 Create underutilized trucks alert card
+
     - Build alert card with Teal background
     - Display count of operational trucks with no assignments in next 7 days
     - Add "View Truck Availability" link
     - Add dismiss button
     - _Requirements: 12.2, 12.3, 12.4, 12.5_
 
-- [ ] 18. Implement error handling and user feedback
+- [x] 18. Implement error handling and user feedback
+
+
+
+
   - Add flash messages for success/error notifications
   - Implement validation error display in all forms
   - Add confirmation modals for deletions and cancellations
@@ -522,7 +533,12 @@
   - Display user-friendly error messages
   - _Requirements: 1.4, 2.5, 3.3, 4.4, 4.5, 6.2, 10.5_
 
-- [ ] 19. Add navigation links to role-specific dashboards
+- [x] 19. Add navigation links to role-specific dashboards
+
+
+
+
+
   - Add "Trucks" link to administrator sidebar
   - Add "Assignments" link to administrator sidebar
   - Add "Truck Availability" link to administrator sidebar
@@ -530,27 +546,45 @@
   - Update dashboard controllers to include navigation
   - _Requirements: All_
 
-- [ ] 20. Create database seeders for testing
-  - [ ] 20.1 Create TruckSeeder
+- [x] 20. Create database seeders for testing
+
+
+
+
+
+  - [x] 20.1 Create TruckSeeder
+
+
     - Create 8-12 sample trucks with different statuses
     - Mix of operational, maintenance, and out-of-service trucks
     - Vary capacity values
     - _Requirements: 1.1, 3.1_
   
-  - [ ] 20.2 Create AssignmentSeeder
+  - [x] 20.2 Create AssignmentSeeder
+
+
     - Create assignments for current and upcoming dates
     - Assign trucks to routes with crew members
     - Leave some routes unassigned for testing
     - Include some cancelled assignments
     - _Requirements: 4.1_
   
-  - [ ] 20.3 Create TruckStatusHistorySeeder
+  - [x] 20.3 Create TruckStatusHistorySeeder
+
+
     - Create sample status change history for trucks
     - Include various status transitions
     - _Requirements: 3.5_
 
-- [ ] 21. Write feature tests for truck management
-  - [ ] 21.1 Test truck CRUD operations
+- [x] 21. Write feature tests for truck management
+
+
+
+
+
+  - [x] 21.1 Test truck CRUD operations
+
+
     - Test truck registration by administrator
     - Test duplicate truck number validation
     - Test truck listing with search and filters
@@ -558,19 +592,28 @@
     - Test truck deletion with future assignment protection
     - _Requirements: 1.1, 1.2, 1.3, 1.4, 2.1, 2.2, 2.3, 2.4, 2.5_
   
-  - [ ] 21.2 Test truck status management
+  - [x] 21.2 Test truck status management
+
     - Test status updates
     - Test status history logging
     - Test warning display for future assignments
     - _Requirements: 3.1, 3.2, 3.3, 3.4, 3.5_
   
-  - [ ] 21.3 Test truck authorization
+  - [x] 21.3 Test truck authorization
+
     - Test that only administrators can manage trucks
     - Test that crew cannot access truck management
     - _Requirements: 2.1_
 
-- [ ] 22. Write feature tests for assignment management
-  - [ ] 22.1 Test assignment CRUD operations
+- [x] 22. Write feature tests for assignment management
+
+
+
+
+
+  - [x] 22.1 Test assignment CRUD operations
+
+
     - Test assignment creation with validation
     - Test truck conflict detection
     - Test crew conflict detection
@@ -580,49 +623,75 @@
     - Test assignment cancellation
     - _Requirements: 4.1, 4.2, 4.3, 4.4, 4.5, 6.1, 6.2, 6.3, 6.4_
   
-  - [ ] 22.2 Test assignment copying
+  - [x] 22.2 Test assignment copying
+
     - Test successful copying to different date
     - Test conflict detection during copying
     - Test selective copying with filters
     - _Requirements: 10.1, 10.2, 10.3, 10.4, 10.5_
   
-  - [ ] 22.3 Test assignment authorization
+  - [x] 22.3 Test assignment authorization
+
     - Test that only administrators can manage assignments
     - _Requirements: 4.1_
 
-- [ ] 23. Write feature tests for crew assignment viewing
-  - [ ] 23.1 Test crew assignment viewing
+- [x] 23. Write feature tests for crew assignment viewing
+
+
+
+
+
+  - [x] 23.1 Test crew assignment viewing
+
+
     - Test today's assignment display
     - Test upcoming assignments display
     - Test "no assignment" message display
     - _Requirements: 7.1, 7.2, 7.3, 7.4, 7.5_
   
+
   - [ ] 23.2 Test crew authorization
     - Test that crew can only view their own assignments
     - Test that crew cannot view other crew assignments
     - _Requirements: 7.1_
 
-- [ ] 24. Write feature tests for availability and alerts
-  - [ ] 24.1 Test truck availability checking
+- [x] 24. Write feature tests for availability and alerts
+
+
+
+
+
+  - [x] 24.1 Test truck availability checking
+
+
     - Test availability display for selected date
     - Test operational truck filtering
     - Test assignment status display
     - _Requirements: 8.1, 8.2, 8.3, 8.4, 8.5_
   
-  - [ ] 24.2 Test unassigned routes detection
+  - [x] 24.2 Test unassigned routes detection
+
+
     - Test unassigned routes listing
     - Test date range filtering
     - Test route details display
     - _Requirements: 9.1, 9.2, 9.3, 9.4, 9.5_
   
-  - [ ] 24.3 Test dashboard alerts
+  - [x] 24.3 Test dashboard alerts
+
+
     - Test unassigned routes alert generation
     - Test underutilized trucks alert generation
     - Test alert dismissal
     - Test alert links
     - _Requirements: 12.1, 12.2, 12.3, 12.4, 12.5_
 
-- [ ] 25. Write feature tests for truck history and reporting
+- [x] 25. Write feature tests for truck history and reporting
+
+
+
+
+
   - Test assignment history display
   - Test date range filtering
   - Test utilization rate calculation

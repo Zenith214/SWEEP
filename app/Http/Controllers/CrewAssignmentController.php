@@ -12,7 +12,6 @@ class CrewAssignmentController extends Controller
 
     public function __construct(AssignmentService $assignmentService)
     {
-        $this->middleware(['auth', 'role:collection_crew']);
         $this->assignmentService = $assignmentService;
     }
 

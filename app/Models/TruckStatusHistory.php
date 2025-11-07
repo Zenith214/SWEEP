@@ -11,6 +11,13 @@ class TruckStatusHistory extends Model
     use HasFactory;
 
     /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'truck_status_history';
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var array<string>

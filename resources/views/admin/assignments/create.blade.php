@@ -53,6 +53,8 @@
 
     <div class="row">
         <div class="col-lg-8">
+            <x-validation-errors />
+            
             <div class="card">
                 <div class="card-body">
                     <form method="POST" action="{{ route('admin.assignments.store') }}" id="assignmentForm">

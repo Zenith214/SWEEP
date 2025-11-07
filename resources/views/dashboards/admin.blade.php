@@ -51,28 +51,15 @@
         <div class="row g-3 mb-4">
             @foreach($alerts as $alert)
                 <div class="col-md-6">
-                    <div class="alert alert-{{ $alert['severity'] === 'warning' ? 'warning' : 'info' }} alert-dismissible fade show mb-0" role="alert">
-                        <div class="d-flex align-items-start">
-                            <div class="flex-grow-1">
-                                <h5 class="alert-heading mb-2">
-                                    <i class="bi bi-{{ $alert['severity'] === 'warning' ? 'exclamation-triangle' : 'info-circle' }}-fill me-2"></i>
-                                    {{ $alert['title'] }}
-                                    <span class="badge bg-{{ $alert['severity'] === 'warning' ? 'warning' : 'info' }} text-dark ms-2">{{ $alert['count'] }}</span>
-                                </h5>
-                                <p class="mb-2">{{ $alert['message'] }}</p>
-                                @if($alert['link'])
-                                    <a href="{{ $alert['link'] }}" class="btn btn-sm btn-{{ $alert['severity'] === 'warning' ? 'warning' : 'info' }}">
-                                        {{ $alert['link_text'] }}
-                                    </a>
-                                @endif
-                            </div>
-                            <form method="POST" action="{{ route('admin.dashboard.dismiss-alert') }}" class="ms-3">
-                                @csrf
-                                <input type="hidden" name="alert_type" value="{{ $alert['type'] }}">
-                                <button type="submit" class="btn-close" aria-label="Dismiss" title="Dismiss for 24 hours"></button>
-                            </form>
-                        </div>
-                    </div>
+                    <x-alert-card 
+                        :type="$alert['type']"
+                        :title="$alert['title']"
+                        :count="$alert['count']"
+                        :message="$alert['message']"
+                        :link="$alert['link']"
+                        :linkText="$alert['link_text']"
+                        :bgColor="$alert['type'] === 'unassigned_routes' ? 'amber' : 'teal'"
+                    />
                 </div>
             @endforeach
         </div>

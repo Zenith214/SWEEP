@@ -1,7 +1,7 @@
 @section('title', 'Route Details')
 
 <x-app-layout>
-    <x-slot name="sidebar">
+        <x-slot name="sidebar">
         <div class="nav flex-column">
             <a class="nav-link" href="{{ route('dashboard') }}">
                 <i class="bi bi-speedometer2"></i> Dashboard
@@ -17,6 +17,15 @@
             </a>
             <a class="nav-link" href="{{ route('admin.holidays.index') }}">
                 <i class="bi bi-calendar-x"></i> Holidays
+            </a>
+            <a class="nav-link" href="{{ route('admin.trucks.index') }}">
+                <i class="bi bi-truck"></i> Trucks
+            </a>
+            <a class="nav-link" href="{{ route('admin.assignments.index') }}">
+                <i class="bi bi-clipboard-check"></i> Assignments
+            </a>
+            <a class="nav-link" href="{{ route('admin.truck-availability.index') }}">
+                <i class="bi bi-calendar-check"></i> Truck Availability
             </a>
             <a class="nav-link text-muted" href="#">
                 <i class="bi bi-file-text"></i> Reports <small>(Coming Soon)</small>

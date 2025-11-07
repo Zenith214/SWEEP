@@ -54,6 +54,9 @@
 
     <div class="row">
         <div class="col-lg-8">
+            <x-validation-errors />
+            <x-conflict-list />
+            
             <div class="card">
                 <div class="card-body">
                     <form method="POST" action="{{ route('admin.assignments.copy') }}" id="copyForm">

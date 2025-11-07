@@ -1,212 +1,275 @@
 /**
- * SWEEP Error Handling Utilities
- * Provides consistent error handling and user feedback across the application
+ * SWEEP Error Handling and User Feedback Utilities
  */
+
+// Auto-dismiss alerts after 5 seconds
+document.addEventListener('DOMContentLoaded', function() {
+    const alerts = document.querySelectorAll('.alert:not(.alert-permanent)');
+    
+    alerts.forEach(function(alert) {
+        // Only auto-dismiss success and info alerts
+        if (alert.classList.contains('alert-success') || alert.classList.contains('alert-info')) {
+            setTimeout(function() {
+                const bsAlert = new bootstrap.Alert(alert);
+                bsAlert.close();
+            }, 5000);
+        }
+    });
+});
 
 /**
- * Display a toast notification
- * @param {string} message - The message to display
- * @param {string} type - The type of notification (success, error, warning, info)
+ * Show confirmation modal before form submission
+ * @param {string} formId - The ID of the form to submit
+ * @param {string} message - The confirmation message
+ * @param {string} title - The modal title (optional)
  */
-function showToast(message, type = 'info') {
-    // Create toast container if it doesn't exist
-    let toastContainer = document.getElementById('toast-container');
-    if (!toastContainer) {
-        toastContainer = document.createElement('div');
-        toastContainer.id = 'toast-container';
-        toastContainer.className = 'position-fixed top-0 end-0 p-3';
-        toastContainer.style.zIndex = '9999';
-        document.body.appendChild(toastContainer);
+function confirmAction(formId, message, title = 'Confirm Action') {
+    // Create modal if it doesn't exist
+    let modal = document.getElementById('dynamicConfirmModal');
+    
+    if (!modal) {
+        const modalHtml = `
+            <div class="modal fade" id="dynamicConfirmModal" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">
+                                <i class="bi bi-exclamation-triangle-fill text-warning me-2"></i>
+                                <span id="dynamicModalTitle"></span>
+                            </h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p id="dynamicModalMessage" class="mb-0"></p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                            <button type="button" class="btn btn-danger" id="dynamicModalConfirm">Confirm</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+        document.body.insertAdjacentHTML('beforeend', modalHtml);
+        modal = document.getElementById('dynamicConfirmModal');
     }
-
-    // Map type to Bootstrap alert class
-    const typeMap = {
-        'success': 'success',
-        'error': 'danger',
-        'warning': 'warning',
-        'info': 'info'
+    
+    // Update modal content
+    document.getElementById('dynamicModalTitle').textContent = title;
+    document.getElementById('dynamicModalMessage').textContent = message;
+    
+    // Set up confirm button
+    const confirmBtn = document.getElementById('dynamicModalConfirm');
+    confirmBtn.onclick = function() {
+        document.getElementById(formId).submit();
     };
-    const alertClass = typeMap[type] || 'info';
-
-    // Map type to icon
-    const iconMap = {
-        'success': 'check-circle-fill',
-        'error': 'exclamation-triangle-fill',
-        'warning': 'exclamation-circle-fill',
-        'info': 'info-circle-fill'
-    };
-    const icon = iconMap[type] || 'info-circle-fill';
-
-    // Create toast element
-    const toastId = 'toast-' + Date.now();
-    const toast = document.createElement('div');
-    toast.id = toastId;
-    toast.className = `alert alert-${alertClass} alert-dismissible fade show`;
-    toast.setAttribute('role', 'alert');
-    toast.innerHTML = `
-        <i class="bi bi-${icon}"></i> ${message}
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    `;
-
-    toastContainer.appendChild(toast);
-
-    // Auto-dismiss after 5 seconds
-    setTimeout(() => {
-        const toastElement = document.getElementById(toastId);
-        if (toastElement) {
-            const bsAlert = new bootstrap.Alert(toastElement);
-            bsAlert.close();
-        }
-    }, 5000);
+    
+    // Show modal
+    const bsModal = new bootstrap.Modal(modal);
+    bsModal.show();
+    
+    return false;
 }
 
 /**
- * Handle AJAX errors consistently
- * @param {object} error - The error object from fetch or axios
- */
-function handleAjaxError(error) {
-    console.error('AJAX Error:', error);
-    
-    let message = 'An unexpected error occurred. Please try again.';
-    
-    if (error.response) {
-        // Server responded with error status
-        if (error.response.data && error.response.data.message) {
-            message = error.response.data.message;
-        } else if (error.response.status === 404) {
-            message = 'The requested resource was not found.';
-        } else if (error.response.status === 403) {
-            message = 'You do not have permission to perform this action.';
-        } else if (error.response.status === 422) {
-            message = 'Validation failed. Please check your input.';
-        } else if (error.response.status >= 500) {
-            message = 'A server error occurred. Please try again later.';
-        }
-    } else if (error.request) {
-        // Request was made but no response received
-        message = 'Unable to connect to the server. Please check your internet connection.';
-    }
-    
-    showToast(message, 'error');
-}
-
-/**
- * Confirm deletion with a modal
+ * Show confirmation modal for deletion
+ * @param {string} formId - The ID of the form to submit
  * @param {string} itemName - The name of the item being deleted
- * @param {function} onConfirm - Callback function to execute on confirmation
  */
-function confirmDelete(itemName, onConfirm) {
-    const confirmed = confirm(`Are you sure you want to delete ${itemName}? This action cannot be undone.`);
-    if (confirmed && typeof onConfirm === 'function') {
-        onConfirm();
+function confirmDelete(formId, itemName) {
+    return confirmAction(
+        formId,
+        `Are you sure you want to delete ${itemName}? This action cannot be undone.`,
+        'Confirm Deletion'
+    );
+}
+
+/**
+ * Show confirmation modal for cancellation
+ * @param {string} formId - The ID of the form to submit
+ * @param {string} itemName - The name of the item being cancelled
+ */
+function confirmCancel(formId, itemName) {
+    return confirmAction(
+        formId,
+        `Are you sure you want to cancel ${itemName}?`,
+        'Confirm Cancellation'
+    );
+}
+
+/**
+ * Show status change warning modal
+ * @param {string} formId - The ID of the form to submit
+ * @param {string} newStatus - The new status
+ * @param {boolean} hasFutureAssignments - Whether truck has future assignments
+ */
+function confirmStatusChange(formId, newStatus, hasFutureAssignments) {
+    let message = `Are you sure you want to change the truck status to "${newStatus}"?`;
+    
+    if (hasFutureAssignments && (newStatus === 'maintenance' || newStatus === 'out_of_service')) {
+        message += '\n\nWarning: This truck has future assignments that may be affected by this status change.';
     }
+    
+    return confirmAction(formId, message, 'Confirm Status Change');
 }
 
 /**
  * Validate form before submission
- * @param {HTMLFormElement} form - The form element to validate
- * @returns {boolean} - True if valid, false otherwise
+ * @param {HTMLFormElement} form - The form element
+ * @returns {boolean} - Whether the form is valid
  */
 function validateForm(form) {
-    // Check HTML5 validation
-    if (!form.checkValidity()) {
-        form.reportValidity();
-        return false;
-    }
+    // Remove previous error messages
+    const existingErrors = form.querySelectorAll('.invalid-feedback');
+    existingErrors.forEach(error => error.remove());
     
-    // Additional custom validation can be added here
-    return true;
-}
-
-/**
- * Display validation errors on a form
- * @param {HTMLFormElement} form - The form element
- * @param {object} errors - Object with field names as keys and error messages as values
- */
-function displayValidationErrors(form, errors) {
-    // Clear existing errors
-    form.querySelectorAll('.is-invalid').forEach(el => {
-        el.classList.remove('is-invalid');
-    });
-    form.querySelectorAll('.invalid-feedback').forEach(el => {
-        el.remove();
-    });
+    const existingInvalidInputs = form.querySelectorAll('.is-invalid');
+    existingInvalidInputs.forEach(input => input.classList.remove('is-invalid'));
     
-    // Display new errors
-    Object.keys(errors).forEach(fieldName => {
-        const field = form.querySelector(`[name="${fieldName}"]`);
-        if (field) {
+    let isValid = true;
+    
+    // Check required fields
+    const requiredFields = form.querySelectorAll('[required]');
+    requiredFields.forEach(field => {
+        if (!field.value.trim()) {
+            isValid = false;
             field.classList.add('is-invalid');
             
             const errorDiv = document.createElement('div');
             errorDiv.className = 'invalid-feedback';
-            errorDiv.textContent = Array.isArray(errors[fieldName]) 
-                ? errors[fieldName][0] 
-                : errors[fieldName];
-            
+            errorDiv.textContent = 'This field is required.';
             field.parentNode.appendChild(errorDiv);
         }
     });
     
-    // Scroll to first error
-    const firstError = form.querySelector('.is-invalid');
-    if (firstError) {
-        firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        firstError.focus();
-    }
-}
-
-/**
- * Handle form submission with loading state
- * @param {HTMLFormElement} form - The form element
- * @param {HTMLButtonElement} submitButton - The submit button
- */
-function handleFormSubmit(form, submitButton) {
-    if (!validateForm(form)) {
-        return;
-    }
-    
-    // Disable submit button and show loading state
-    submitButton.disabled = true;
-    const originalText = submitButton.innerHTML;
-    submitButton.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Processing...';
-    
-    // Re-enable after form submission (in case of validation errors)
-    setTimeout(() => {
-        submitButton.disabled = false;
-        submitButton.innerHTML = originalText;
-    }, 3000);
-}
-
-/**
- * Initialize error handling for all forms
- */
-document.addEventListener('DOMContentLoaded', function() {
-    // Add submit handler to all forms with data-validate attribute
-    document.querySelectorAll('form[data-validate]').forEach(form => {
-        form.addEventListener('submit', function(e) {
-            const submitButton = form.querySelector('button[type="submit"]');
-            if (submitButton) {
-                handleFormSubmit(form, submitButton);
+    // Check date fields
+    const dateFields = form.querySelectorAll('input[type="date"]');
+    dateFields.forEach(field => {
+        if (field.value && field.hasAttribute('min')) {
+            const minDate = new Date(field.getAttribute('min'));
+            const selectedDate = new Date(field.value);
+            
+            if (selectedDate < minDate) {
+                isValid = false;
+                field.classList.add('is-invalid');
+                
+                const errorDiv = document.createElement('div');
+                errorDiv.className = 'invalid-feedback';
+                errorDiv.textContent = 'Date cannot be in the past.';
+                field.parentNode.appendChild(errorDiv);
             }
-        });
+        }
     });
     
-    // Initialize tooltips
-    const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-    tooltipTriggerList.map(function (tooltipTriggerEl) {
-        return new bootstrap.Tooltip(tooltipTriggerEl);
+    return isValid;
+}
+
+/**
+ * Show inline error message for a field
+ * @param {string} fieldId - The ID of the field
+ * @param {string} message - The error message
+ */
+function showFieldError(fieldId, message) {
+    const field = document.getElementById(fieldId);
+    if (!field) return;
+    
+    // Remove existing error
+    const existingError = field.parentNode.querySelector('.invalid-feedback');
+    if (existingError) {
+        existingError.remove();
+    }
+    
+    // Add error class and message
+    field.classList.add('is-invalid');
+    
+    const errorDiv = document.createElement('div');
+    errorDiv.className = 'invalid-feedback';
+    errorDiv.textContent = message;
+    field.parentNode.appendChild(errorDiv);
+}
+
+/**
+ * Clear field error
+ * @param {string} fieldId - The ID of the field
+ */
+function clearFieldError(fieldId) {
+    const field = document.getElementById(fieldId);
+    if (!field) return;
+    
+    field.classList.remove('is-invalid');
+    
+    const existingError = field.parentNode.querySelector('.invalid-feedback');
+    if (existingError) {
+        existingError.remove();
+    }
+}
+
+/**
+ * Show toast notification
+ * @param {string} message - The message to display
+ * @param {string} type - The type of toast (success, error, warning, info)
+ */
+function showToast(message, type = 'info') {
+    // Create toast container if it doesn't exist
+    let toastContainer = document.getElementById('toastContainer');
+    
+    if (!toastContainer) {
+        toastContainer = document.createElement('div');
+        toastContainer.id = 'toastContainer';
+        toastContainer.className = 'toast-container position-fixed top-0 end-0 p-3';
+        toastContainer.style.zIndex = '9999';
+        document.body.appendChild(toastContainer);
+    }
+    
+    // Map type to Bootstrap classes
+    const typeClasses = {
+        success: 'bg-success text-white',
+        error: 'bg-danger text-white',
+        warning: 'bg-warning text-dark',
+        info: 'bg-info text-white'
+    };
+    
+    const typeIcons = {
+        success: 'check-circle-fill',
+        error: 'exclamation-triangle-fill',
+        warning: 'exclamation-circle-fill',
+        info: 'info-circle-fill'
+    };
+    
+    // Create toast
+    const toastId = 'toast-' + Date.now();
+    const toastHtml = `
+        <div id="${toastId}" class="toast ${typeClasses[type] || typeClasses.info}" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header ${typeClasses[type] || typeClasses.info}">
+                <i class="bi bi-${typeIcons[type] || typeIcons.info} me-2"></i>
+                <strong class="me-auto">${type.charAt(0).toUpperCase() + type.slice(1)}</strong>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body">
+                ${message}
+            </div>
+        </div>
+    `;
+    
+    toastContainer.insertAdjacentHTML('beforeend', toastHtml);
+    
+    // Show toast
+    const toastElement = document.getElementById(toastId);
+    const toast = new bootstrap.Toast(toastElement, { delay: 5000 });
+    toast.show();
+    
+    // Remove toast element after it's hidden
+    toastElement.addEventListener('hidden.bs.toast', function() {
+        toastElement.remove();
     });
-});
+}
 
 // Export functions for use in other scripts
-if (typeof module !== 'undefined' && module.exports) {
-    module.exports = {
-        showToast,
-        handleAjaxError,
-        confirmDelete,
-        validateForm,
-        displayValidationErrors,
-        handleFormSubmit
-    };
-}
+window.confirmAction = confirmAction;
+window.confirmDelete = confirmDelete;
+window.confirmCancel = confirmCancel;
+window.confirmStatusChange = confirmStatusChange;
+window.validateForm = validateForm;
+window.showFieldError = showFieldError;
+window.clearFieldError = clearFieldError;
+window.showToast = showToast;

@@ -9,6 +9,12 @@
             <a class="nav-link" href="{{ route('resident.schedules') }}">
                 <i class="bi bi-calendar3"></i> My Schedule
             </a>
+            <a class="nav-link text-muted" href="#">
+                <i class="bi bi-file-earmark-plus"></i> Submit Report <small>(Coming Soon)</small>
+            </a>
+            <a class="nav-link text-muted" href="#">
+                <i class="bi bi-list-check"></i> My Reports <small>(Coming Soon)</small>
+            </a>
             <hr>
             <a class="nav-link" href="{{ route('profile.edit') }}">
                 <i class="bi bi-gear"></i> Settings

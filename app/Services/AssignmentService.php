@@ -191,10 +191,10 @@ class AssignmentService
                 ];
             } catch (\Exception $e) {
                 $results['conflicts'][] = [
-                    'truck' => $sourceAssignment->truck->truck_number,
-                    'route' => $sourceAssignment->route->name,
-                    'crew' => $sourceAssignment->user->name,
-                    'error' => $e->getMessage(),
+                    'truck_number' => $sourceAssignment->truck->truck_number,
+                    'route_name' => $sourceAssignment->route->name,
+                    'crew_name' => $sourceAssignment->user->name,
+                    'reason' => $e->getMessage(),
                 ];
             }
         }
@@ -331,10 +331,8 @@ class AssignmentService
     {
         return Assignment::active()
             ->where('user_id', $user->id)
-            ->whereBetween('assignment_date', [
-                $start->format('Y-m-d'),
-                $end->format('Y-m-d')
-            ])
+            ->whereDate('assignment_date', '>=', $start)
+            ->whereDate('assignment_date', '<=', $end)
             ->with(['truck', 'route.activeSchedules'])
             ->orderBy('assignment_date')
             ->get();

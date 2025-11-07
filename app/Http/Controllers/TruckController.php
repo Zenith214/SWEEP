@@ -15,14 +15,6 @@ use Illuminate\View\View;
 class TruckController extends Controller
 {
     /**
-     * Ensure only administrators can access truck management.
-     */
-    public function __construct()
-    {
-        $this->middleware(['auth', 'role:administrator']);
-    }
-
-    /**
      * Display a listing of trucks with search and filters.
      */
     public function index(Request $request): View
@@ -91,8 +83,13 @@ class TruckController extends Controller
         
         $assignmentHistory = $truck->getAssignmentHistory($startDate, $endDate);
         $utilizationRate = $truck->getUtilizationRate($startDate, $endDate);
+        $totalAssignments = $assignmentHistory->count();
+        
+        // Get recent assignments (last 30 days)
+        $recentStartDate = Carbon::now()->subDays(30);
+        $recentAssignments = $truck->getAssignmentHistory($recentStartDate, $endDate)->count();
 
-        return view('admin.trucks.show', compact('truck', 'assignmentHistory', 'utilizationRate', 'startDate', 'endDate'));
+        return view('admin.trucks.show', compact('truck', 'assignmentHistory', 'utilizationRate', 'totalAssignments', 'recentAssignments', 'startDate', 'endDate'));
     }
 
     /**
@@ -111,7 +108,7 @@ class TruckController extends Controller
         try {
             $truck->update($request->validated());
 
-            return redirect()->route('admin.trucks.show', $truck)
+            return redirect()->route('admin.trucks.index')
                 ->with('success', 'Truck updated successfully.');
         } catch (\Exception $e) {
             return redirect()->back()
@@ -174,14 +171,13 @@ class TruckController extends Controller
                 'notes' => $validated['notes'] ?? null,
             ]);
 
-            $message = 'Truck status updated successfully.';
-            
             if ($hasFutureAssignments && ($newStatus === Truck::STATUS_MAINTENANCE || $newStatus === Truck::STATUS_OUT_OF_SERVICE)) {
-                $message .= ' Warning: This truck has future assignments that may be affected.';
+                return redirect()->route('admin.trucks.show', $truck)
+                    ->with('warning', 'Truck status updated successfully. Warning: This truck has future assignments that may be affected.');
             }
 
             return redirect()->route('admin.trucks.show', $truck)
-                ->with('success', $message);
+                ->with('success', 'Truck status updated successfully.');
         } catch (\Exception $e) {
             return redirect()->back()
                 ->with('error', 'Failed to update truck status: ' . $e->getMessage());

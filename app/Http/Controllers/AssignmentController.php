@@ -19,7 +19,6 @@ class AssignmentController extends Controller
 
     public function __construct(AssignmentService $assignmentService)
     {
-        $this->middleware(['auth', 'role:administrator']);
         $this->assignmentService = $assignmentService;
     }
 
