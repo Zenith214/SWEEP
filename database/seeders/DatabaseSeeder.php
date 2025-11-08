@@ -25,6 +25,9 @@ class DatabaseSeeder extends Seeder
             TruckSeeder::class,
             TruckStatusHistorySeeder::class,
             AssignmentSeeder::class,
+            CollectionLogSeeder::class,
+            CollectionPhotoSeeder::class,
+            AdminNoteSeeder::class,
         ]);
     }
 }

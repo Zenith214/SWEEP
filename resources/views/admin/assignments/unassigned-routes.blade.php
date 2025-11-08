@@ -27,8 +27,20 @@
             <a class="nav-link" href="{{ route('admin.truck-availability.index') }}">
                 <i class="bi bi-calendar-check"></i> Truck Availability
             </a>
+            <a class="nav-link" href="{{ route('admin.collection-logs.index') }}">
+                <i class="bi bi-clipboard-data"></i> Collection Logs
+            </a>
+            <a class="nav-link" href="{{ route('admin.analytics.collections.index') }}">
+                <i class="bi bi-graph-up"></i> Collection Analytics
+            </a>
             <a class="nav-link active" href="{{ route('admin.assignments.unassigned-routes') }}">
                 <i class="bi bi-exclamation-triangle"></i> Unassigned Routes
+            </a>
+            <a class="nav-link text-muted" href="#">
+                <i class="bi bi-file-text"></i> Reports <small>(Coming Soon)</small>
+            </a>
+            <a class="nav-link text-muted" href="#">
+                <i class="bi bi-recycle"></i> Recycling <small>(Coming Soon)</small>
             </a>
             <hr>
             <a class="nav-link" href="{{ route('profile.edit') }}">

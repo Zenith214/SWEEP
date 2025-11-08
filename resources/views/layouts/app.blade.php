@@ -93,14 +93,17 @@
 
             .badge-administrator {
                 background-color: var(--sweep-primary);
+                color: white;
             }
 
-            .badge-collection_crew {
+            .badge-collectioncrew {
                 background-color: var(--sweep-secondary);
+                color: white;
             }
 
             .badge-resident {
                 background-color: var(--sweep-accent);
+                color: white;
             }
 
             .main-content {

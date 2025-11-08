@@ -1,275 +1,262 @@
 /**
- * SWEEP Error Handling and User Feedback Utilities
+ * SWEEP Error Handling Utilities
+ * Provides client-side error handling and user feedback functionality
  */
 
-// Auto-dismiss alerts after 5 seconds
-document.addEventListener('DOMContentLoaded', function() {
-    const alerts = document.querySelectorAll('.alert:not(.alert-permanent)');
-    
-    alerts.forEach(function(alert) {
-        // Only auto-dismiss success and info alerts
-        if (alert.classList.contains('alert-success') || alert.classList.contains('alert-info')) {
-            setTimeout(function() {
-                const bsAlert = new bootstrap.Alert(alert);
-                bsAlert.close();
-            }, 5000);
+(function() {
+    'use strict';
+
+    /**
+     * Display a toast notification
+     */
+    function showToast(message, type = 'info') {
+        const toastContainer = getOrCreateToastContainer();
+        
+        const toast = document.createElement('div');
+        toast.className = `toast align-items-center text-white bg-${type} border-0`;
+        toast.setAttribute('role', 'alert');
+        toast.setAttribute('aria-live', 'assertive');
+        toast.setAttribute('aria-atomic', 'true');
+        
+        const iconMap = {
+            'success': 'check-circle-fill',
+            'danger': 'exclamation-triangle-fill',
+            'warning': 'exclamation-circle-fill',
+            'info': 'info-circle-fill'
+        };
+        
+        toast.innerHTML = `
+            <div class="d-flex">
+                <div class="toast-body">
+                    <i class="bi bi-${iconMap[type] || 'info-circle-fill'}"></i> ${message}
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+        `;
+        
+        toastContainer.appendChild(toast);
+        
+        const bsToast = new bootstrap.Toast(toast, {
+            autohide: true,
+            delay: 5000
+        });
+        
+        bsToast.show();
+        
+        toast.addEventListener('hidden.bs.toast', function() {
+            toast.remove();
+        });
+    }
+
+    /**
+     * Get or create toast container
+     */
+    function getOrCreateToastContainer() {
+        let container = document.getElementById('toastContainer');
+        
+        if (!container) {
+            container = document.createElement('div');
+            container.id = 'toastContainer';
+            container.className = 'toast-container position-fixed top-0 end-0 p-3';
+            container.style.zIndex = '9999';
+            document.body.appendChild(container);
         }
-    });
-});
+        
+        return container;
+    }
 
-/**
- * Show confirmation modal before form submission
- * @param {string} formId - The ID of the form to submit
- * @param {string} message - The confirmation message
- * @param {string} title - The modal title (optional)
- */
-function confirmAction(formId, message, title = 'Confirm Action') {
-    // Create modal if it doesn't exist
-    let modal = document.getElementById('dynamicConfirmModal');
-    
-    if (!modal) {
-        const modalHtml = `
-            <div class="modal fade" id="dynamicConfirmModal" tabindex="-1" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title">
-                                <i class="bi bi-exclamation-triangle-fill text-warning me-2"></i>
-                                <span id="dynamicModalTitle"></span>
-                            </h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <p id="dynamicModalMessage" class="mb-0"></p>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                            <button type="button" class="btn btn-danger" id="dynamicModalConfirm">Confirm</button>
-                        </div>
+    /**
+     * Confirm action with modal
+     */
+    function confirmAction(message, onConfirm, options = {}) {
+        const defaults = {
+            title: 'Confirm Action',
+            confirmText: 'Confirm',
+            cancelText: 'Cancel',
+            confirmClass: 'btn-danger',
+            icon: 'exclamation-triangle-fill'
+        };
+        
+        const settings = { ...defaults, ...options };
+        
+        // Create modal
+        const modalId = 'confirmModal_' + Date.now();
+        const modal = document.createElement('div');
+        modal.className = 'modal fade';
+        modal.id = modalId;
+        modal.setAttribute('tabindex', '-1');
+        modal.setAttribute('aria-hidden', 'true');
+        
+        modal.innerHTML = `
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">
+                            <i class="bi bi-${settings.icon}"></i> ${settings.title}
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        ${message}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                            ${settings.cancelText}
+                        </button>
+                        <button type="button" class="btn ${settings.confirmClass}" id="confirmBtn_${modalId}">
+                            ${settings.confirmText}
+                        </button>
                     </div>
                 </div>
             </div>
         `;
-        document.body.insertAdjacentHTML('beforeend', modalHtml);
-        modal = document.getElementById('dynamicConfirmModal');
-    }
-    
-    // Update modal content
-    document.getElementById('dynamicModalTitle').textContent = title;
-    document.getElementById('dynamicModalMessage').textContent = message;
-    
-    // Set up confirm button
-    const confirmBtn = document.getElementById('dynamicModalConfirm');
-    confirmBtn.onclick = function() {
-        document.getElementById(formId).submit();
-    };
-    
-    // Show modal
-    const bsModal = new bootstrap.Modal(modal);
-    bsModal.show();
-    
-    return false;
-}
-
-/**
- * Show confirmation modal for deletion
- * @param {string} formId - The ID of the form to submit
- * @param {string} itemName - The name of the item being deleted
- */
-function confirmDelete(formId, itemName) {
-    return confirmAction(
-        formId,
-        `Are you sure you want to delete ${itemName}? This action cannot be undone.`,
-        'Confirm Deletion'
-    );
-}
-
-/**
- * Show confirmation modal for cancellation
- * @param {string} formId - The ID of the form to submit
- * @param {string} itemName - The name of the item being cancelled
- */
-function confirmCancel(formId, itemName) {
-    return confirmAction(
-        formId,
-        `Are you sure you want to cancel ${itemName}?`,
-        'Confirm Cancellation'
-    );
-}
-
-/**
- * Show status change warning modal
- * @param {string} formId - The ID of the form to submit
- * @param {string} newStatus - The new status
- * @param {boolean} hasFutureAssignments - Whether truck has future assignments
- */
-function confirmStatusChange(formId, newStatus, hasFutureAssignments) {
-    let message = `Are you sure you want to change the truck status to "${newStatus}"?`;
-    
-    if (hasFutureAssignments && (newStatus === 'maintenance' || newStatus === 'out_of_service')) {
-        message += '\n\nWarning: This truck has future assignments that may be affected by this status change.';
-    }
-    
-    return confirmAction(formId, message, 'Confirm Status Change');
-}
-
-/**
- * Validate form before submission
- * @param {HTMLFormElement} form - The form element
- * @returns {boolean} - Whether the form is valid
- */
-function validateForm(form) {
-    // Remove previous error messages
-    const existingErrors = form.querySelectorAll('.invalid-feedback');
-    existingErrors.forEach(error => error.remove());
-    
-    const existingInvalidInputs = form.querySelectorAll('.is-invalid');
-    existingInvalidInputs.forEach(input => input.classList.remove('is-invalid'));
-    
-    let isValid = true;
-    
-    // Check required fields
-    const requiredFields = form.querySelectorAll('[required]');
-    requiredFields.forEach(field => {
-        if (!field.value.trim()) {
-            isValid = false;
-            field.classList.add('is-invalid');
-            
-            const errorDiv = document.createElement('div');
-            errorDiv.className = 'invalid-feedback';
-            errorDiv.textContent = 'This field is required.';
-            field.parentNode.appendChild(errorDiv);
-        }
-    });
-    
-    // Check date fields
-    const dateFields = form.querySelectorAll('input[type="date"]');
-    dateFields.forEach(field => {
-        if (field.value && field.hasAttribute('min')) {
-            const minDate = new Date(field.getAttribute('min'));
-            const selectedDate = new Date(field.value);
-            
-            if (selectedDate < minDate) {
-                isValid = false;
-                field.classList.add('is-invalid');
-                
-                const errorDiv = document.createElement('div');
-                errorDiv.className = 'invalid-feedback';
-                errorDiv.textContent = 'Date cannot be in the past.';
-                field.parentNode.appendChild(errorDiv);
+        
+        document.body.appendChild(modal);
+        
+        const bsModal = new bootstrap.Modal(modal);
+        
+        document.getElementById('confirmBtn_' + modalId).addEventListener('click', function() {
+            bsModal.hide();
+            if (typeof onConfirm === 'function') {
+                onConfirm();
             }
+        });
+        
+        modal.addEventListener('hidden.bs.modal', function() {
+            modal.remove();
+        });
+        
+        bsModal.show();
+    }
+
+    /**
+     * Handle AJAX errors
+     */
+    function handleAjaxError(error, defaultMessage = 'An error occurred') {
+        let message = defaultMessage;
+        
+        if (error.response) {
+            if (error.response.data && error.response.data.message) {
+                message = error.response.data.message;
+            } else if (error.response.data && error.response.data.errors) {
+                // Handle validation errors
+                const errors = error.response.data.errors;
+                const errorMessages = Object.values(errors).flat();
+                message = errorMessages.join('<br>');
+            } else if (error.response.statusText) {
+                message = error.response.statusText;
+            }
+        } else if (error.message) {
+            message = error.message;
         }
+        
+        showToast(message, 'danger');
+    }
+
+    /**
+     * Validate file upload
+     */
+    function validateFile(file, options = {}) {
+        const defaults = {
+            maxSize: 5 * 1024 * 1024, // 5MB
+            allowedTypes: ['image/jpeg', 'image/png', 'image/webp'],
+            allowedExtensions: ['jpg', 'jpeg', 'png', 'webp']
+        };
+        
+        const settings = { ...defaults, ...options };
+        
+        // Check file size
+        if (file.size > settings.maxSize) {
+            const sizeMB = (settings.maxSize / (1024 * 1024)).toFixed(0);
+            return {
+                valid: false,
+                error: `File "${file.name}" is too large. Maximum size is ${sizeMB}MB.`
+            };
+        }
+        
+        // Check file type
+        if (settings.allowedTypes.length > 0 && !settings.allowedTypes.includes(file.type)) {
+            return {
+                valid: false,
+                error: `File "${file.name}" has an invalid type. Only ${settings.allowedExtensions.join(', ').toUpperCase()} files are allowed.`
+            };
+        }
+        
+        // Check file extension
+        const extension = file.name.split('.').pop().toLowerCase();
+        if (settings.allowedExtensions.length > 0 && !settings.allowedExtensions.includes(extension)) {
+            return {
+                valid: false,
+                error: `File "${file.name}" has an invalid extension. Only ${settings.allowedExtensions.join(', ').toUpperCase()} files are allowed.`
+            };
+        }
+        
+        return { valid: true };
+    }
+
+    /**
+     * Format file size
+     */
+    function formatFileSize(bytes) {
+        if (bytes === 0) return '0 Bytes';
+        
+        const k = 1024;
+        const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        
+        return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i];
+    }
+
+    /**
+     * Auto-dismiss alerts after delay
+     */
+    function autoDismissAlerts(selector = '.alert-dismissible', delay = 5000) {
+        const alerts = document.querySelectorAll(selector);
+        
+        alerts.forEach(alert => {
+            setTimeout(() => {
+                const bsAlert = bootstrap.Alert.getOrCreateInstance(alert);
+                bsAlert.close();
+            }, delay);
+        });
+    }
+
+    // Initialize on page load
+    document.addEventListener('DOMContentLoaded', function() {
+        // Auto-dismiss alerts
+        autoDismissAlerts();
+        
+        // Add confirmation to delete buttons
+        document.querySelectorAll('[data-confirm]').forEach(element => {
+            element.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const message = this.getAttribute('data-confirm');
+                const form = this.closest('form');
+                const href = this.getAttribute('href');
+                
+                confirmAction(message, function() {
+                    if (form) {
+                        form.submit();
+                    } else if (href) {
+                        window.location.href = href;
+                    }
+                }, {
+                    title: 'Confirm Deletion',
+                    confirmText: 'Delete',
+                    confirmClass: 'btn-danger',
+                    icon: 'trash-fill'
+                });
+            });
+        });
     });
-    
-    return isValid;
-}
 
-/**
- * Show inline error message for a field
- * @param {string} fieldId - The ID of the field
- * @param {string} message - The error message
- */
-function showFieldError(fieldId, message) {
-    const field = document.getElementById(fieldId);
-    if (!field) return;
-    
-    // Remove existing error
-    const existingError = field.parentNode.querySelector('.invalid-feedback');
-    if (existingError) {
-        existingError.remove();
-    }
-    
-    // Add error class and message
-    field.classList.add('is-invalid');
-    
-    const errorDiv = document.createElement('div');
-    errorDiv.className = 'invalid-feedback';
-    errorDiv.textContent = message;
-    field.parentNode.appendChild(errorDiv);
-}
-
-/**
- * Clear field error
- * @param {string} fieldId - The ID of the field
- */
-function clearFieldError(fieldId) {
-    const field = document.getElementById(fieldId);
-    if (!field) return;
-    
-    field.classList.remove('is-invalid');
-    
-    const existingError = field.parentNode.querySelector('.invalid-feedback');
-    if (existingError) {
-        existingError.remove();
-    }
-}
-
-/**
- * Show toast notification
- * @param {string} message - The message to display
- * @param {string} type - The type of toast (success, error, warning, info)
- */
-function showToast(message, type = 'info') {
-    // Create toast container if it doesn't exist
-    let toastContainer = document.getElementById('toastContainer');
-    
-    if (!toastContainer) {
-        toastContainer = document.createElement('div');
-        toastContainer.id = 'toastContainer';
-        toastContainer.className = 'toast-container position-fixed top-0 end-0 p-3';
-        toastContainer.style.zIndex = '9999';
-        document.body.appendChild(toastContainer);
-    }
-    
-    // Map type to Bootstrap classes
-    const typeClasses = {
-        success: 'bg-success text-white',
-        error: 'bg-danger text-white',
-        warning: 'bg-warning text-dark',
-        info: 'bg-info text-white'
-    };
-    
-    const typeIcons = {
-        success: 'check-circle-fill',
-        error: 'exclamation-triangle-fill',
-        warning: 'exclamation-circle-fill',
-        info: 'info-circle-fill'
-    };
-    
-    // Create toast
-    const toastId = 'toast-' + Date.now();
-    const toastHtml = `
-        <div id="${toastId}" class="toast ${typeClasses[type] || typeClasses.info}" role="alert" aria-live="assertive" aria-atomic="true">
-            <div class="toast-header ${typeClasses[type] || typeClasses.info}">
-                <i class="bi bi-${typeIcons[type] || typeIcons.info} me-2"></i>
-                <strong class="me-auto">${type.charAt(0).toUpperCase() + type.slice(1)}</strong>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
-            </div>
-            <div class="toast-body">
-                ${message}
-            </div>
-        </div>
-    `;
-    
-    toastContainer.insertAdjacentHTML('beforeend', toastHtml);
-    
-    // Show toast
-    const toastElement = document.getElementById(toastId);
-    const toast = new bootstrap.Toast(toastElement, { delay: 5000 });
-    toast.show();
-    
-    // Remove toast element after it's hidden
-    toastElement.addEventListener('hidden.bs.toast', function() {
-        toastElement.remove();
-    });
-}
-
-// Export functions for use in other scripts
-window.confirmAction = confirmAction;
-window.confirmDelete = confirmDelete;
-window.confirmCancel = confirmCancel;
-window.confirmStatusChange = confirmStatusChange;
-window.validateForm = validateForm;
-window.showFieldError = showFieldError;
-window.clearFieldError = clearFieldError;
-window.showToast = showToast;
+    // Expose utilities globally
+    window.SWEEP = window.SWEEP || {};
+    window.SWEEP.showToast = showToast;
+    window.SWEEP.confirmAction = confirmAction;
+    window.SWEEP.handleAjaxError = handleAjaxError;
+    window.SWEEP.validateFile = validateFile;
+    window.SWEEP.formatFileSize = formatFileSize;
+    window.SWEEP.autoDismissAlerts = autoDismissAlerts;
+})();

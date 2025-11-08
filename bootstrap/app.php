@@ -15,6 +15,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'role' => \App\Http\Middleware\EnsureUserHasRole::class,
             'rate.limit.login' => \App\Http\Middleware\RateLimitLogin::class,
+            'ensure.log.editable' => \App\Http\Middleware\EnsureLogIsEditable::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

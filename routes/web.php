@@ -147,6 +147,20 @@ Route::middleware(['auth', 'role:administrator'])->prefix('admin')->name('admin.
     // Truck availability routes
     Route::get('truck-availability', [TruckAvailabilityController::class, 'index'])->name('truck-availability.index');
     Route::get('truck-availability/data', [TruckAvailabilityController::class, 'getAvailability'])->name('truck-availability.data');
+    
+    // Collection log management routes
+    Route::get('collection-logs', [\App\Http\Controllers\AdminCollectionLogController::class, 'index'])->name('collection-logs.index');
+    Route::get('collection-logs/issues/analysis', [\App\Http\Controllers\AdminCollectionLogController::class, 'issueAnalysis'])->name('collection-logs.issues.analysis');
+    Route::get('collection-logs/{collectionLog}', [\App\Http\Controllers\AdminCollectionLogController::class, 'show'])->name('collection-logs.show');
+    Route::post('collection-logs/{collectionLog}/notes', [\App\Http\Controllers\AdminCollectionLogController::class, 'addNote'])->name('collection-logs.notes.add');
+    Route::get('routes/{route}/issues', [\App\Http\Controllers\AdminCollectionLogController::class, 'routeIssues'])->name('routes.issues');
+    
+    // Collection analytics routes
+    Route::get('analytics/collections', [\App\Http\Controllers\CollectionAnalyticsController::class, 'index'])->name('analytics.collections.index');
+    Route::get('analytics/collections/completion-rates', [\App\Http\Controllers\CollectionAnalyticsController::class, 'getCompletionRates'])->name('analytics.collections.completion-rates');
+    Route::get('analytics/collections/status-breakdown', [\App\Http\Controllers\CollectionAnalyticsController::class, 'getStatusBreakdown'])->name('analytics.collections.status-breakdown');
+    Route::get('analytics/collections/crew-performance', [\App\Http\Controllers\CollectionAnalyticsController::class, 'getCrewPerformance'])->name('analytics.collections.crew-performance');
+    Route::get('analytics/collections/route-performance', [\App\Http\Controllers\CollectionAnalyticsController::class, 'getRoutePerformance'])->name('analytics.collections.route-performance');
 });
 
 /*
@@ -186,4 +200,22 @@ Route::middleware(['auth', 'role:collection_crew,administrator'])->prefix('crew'
     // Assignment viewing routes
     Route::get('assignments', [CrewAssignmentController::class, 'index'])->name('assignments');
     Route::get('assignments/upcoming', [CrewAssignmentController::class, 'upcoming'])->name('assignments.upcoming');
+    
+    // Collection logging routes
+    Route::get('collections', [\App\Http\Controllers\CollectionLogController::class, 'index'])->name('collections');
+    Route::get('collections/history', [\App\Http\Controllers\CollectionLogController::class, 'history'])->name('collections.history');
+    Route::get('assignments/{assignment}/log', [\App\Http\Controllers\CollectionLogController::class, 'create'])->name('collections.create');
+    Route::post('assignments/{assignment}/log', [\App\Http\Controllers\CollectionLogController::class, 'store'])->name('collections.store');
+    Route::get('collections/{collectionLog}', [\App\Http\Controllers\CollectionLogController::class, 'show'])->name('collections.show');
+    Route::get('collections/{collectionLog}/edit', [\App\Http\Controllers\CollectionLogController::class, 'edit'])
+        ->middleware('ensure.log.editable')
+        ->name('collections.edit');
+    Route::patch('collections/{collectionLog}', [\App\Http\Controllers\CollectionLogController::class, 'update'])
+        ->middleware('ensure.log.editable')
+        ->name('collections.update');
+    Route::post('collections/{collectionLog}/photos', [\App\Http\Controllers\CollectionLogController::class, 'uploadPhoto'])
+        ->middleware('ensure.log.editable')
+        ->name('collections.photos.upload');
+    Route::delete('photos/{photo}', [\App\Http\Controllers\CollectionLogController::class, 'deletePhoto'])
+        ->name('collections.photos.delete');
 });

@@ -27,6 +27,12 @@
             <a class="nav-link" href="{{ route('admin.truck-availability.index') }}">
                 <i class="bi bi-calendar-check"></i> Truck Availability
             </a>
+            <a class="nav-link" href="{{ route('admin.collection-logs.index') }}">
+                <i class="bi bi-clipboard-data"></i> Collection Logs
+            </a>
+            <a class="nav-link" href="{{ route('admin.analytics.collections.index') }}">
+                <i class="bi bi-graph-up"></i> Collection Analytics
+            </a>
             <a class="nav-link text-muted" href="#">
                 <i class="bi bi-file-text"></i> Reports <small>(Coming Soon)</small>
             </a>
@@ -141,7 +147,7 @@
                         <p class="small mb-0">Full access to all system features including user management, routes, schedules, and reports.</p>
                     </div>
                     <div class="mb-3">
-                        <h6><span class="badge badge-collection_crew">Collection Crew</span></h6>
+                        <h6><span class="badge badge-collectioncrew">Collection Crew</span></h6>
                         <p class="small mb-0">Access to view routes, log collections, and manage field activities.</p>
                     </div>
                     <div class="mb-3">

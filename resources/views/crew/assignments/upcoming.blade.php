@@ -18,6 +18,12 @@
             <a class="nav-link active" href="{{ route('crew.assignments.upcoming') }}">
                 <i class="bi bi-calendar-week"></i> Upcoming Assignments
             </a>
+            <a class="nav-link" href="{{ route('crew.collections') }}">
+                <i class="bi bi-clipboard-check"></i> Log Collection
+            </a>
+            <a class="nav-link" href="{{ route('crew.collections.history') }}">
+                <i class="bi bi-clock-history"></i> Collection History
+            </a>
             <hr>
             <a class="nav-link" href="{{ route('profile.edit') }}">
                 <i class="bi bi-gear"></i> Settings

@@ -60,6 +60,15 @@ return [
             'report' => false,
         ],
 
+        'collection_photos' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/collection-photos'),
+            'url' => env('APP_URL').'/storage/collection-photos',
+            'visibility' => 'public',
+            'throw' => false,
+            'report' => false,
+        ],
+
     ],
 
     /*
@@ -75,6 +84,7 @@ return [
 
     'links' => [
         public_path('storage') => storage_path('app/public'),
+        public_path('storage/collection-photos') => storage_path('app/public/collection-photos'),
     ],
 
 ];
