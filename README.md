@@ -52,42 +52,126 @@ SWEEP centralizes waste collection management by providing scheduling, route tra
 - **Framework**: Laravel 12.x
 - **PHP**: 8.2+
 - **Database**: MariaDB/MySQL
-- **Authentication**: Laravel Breeze
-- **Permissions**: Spatie Laravel Permission
-- **Queue System**: Database driver (configurable)
+- **Authentication**: Laravel Breeze 2.x
+- **Permissions**: Spatie Laravel Permission 6.x
+- **Queue System**: Database driver (configurable to Redis/Beanstalkd)
 
 ### Frontend
-- **CSS Framework**: Tailwind CSS 3.x
+- **CSS Framework**: Tailwind CSS 3.x with Forms plugin
 - **JavaScript**: Alpine.js 3.x
-- **Charts**: Chart.js 4.x
-- **Calendar**: FullCalendar 6.x
+- **Charts**: Chart.js 4.5+
+- **Calendar**: FullCalendar 6.1+
 - **Build Tool**: Vite 7.x
+- **HTTP Client**: Axios 1.x
 
-### Additional Packages
-- **PDF Generation**: barryvdh/laravel-dompdf
-- **Excel Export**: maatwebsite/excel
-- **Image Processing**: intervention/image
+### Additional Backend Packages
+- **PDF Generation**: barryvdh/laravel-dompdf 3.x
+- **Excel Export**: maatwebsite/excel 1.x
+- **Image Processing**: intervention/image 3.x
+- **Testing**: PHPUnit 11.x, Mockery 1.x
+- **Code Quality**: Laravel Pint 1.x
+
+### Development Tools
+- **Laravel Tinker**: Interactive REPL
+- **Laravel Sail**: Docker development environment (optional)
+- **Laravel Pail**: Log viewer
+- **Concurrently**: Run multiple dev processes
 
 ## System Requirements
 
-- PHP 8.2 or higher
-- Composer 2.x
-- Node.js 18.x or higher
-- npm 9.x or higher
-- MariaDB 10.6+ or MySQL 8.0+
+### Required Software
+- **PHP**: 8.2 or higher
+- **Composer**: 2.x or higher
+- **Node.js**: 18.x or higher
+- **npm**: 9.x or higher
+- **Database**: MariaDB 10.6+ or MySQL 8.0+
+
+### PHP Extensions Required
+- BCMath PHP Extension
+- Ctype PHP Extension
+- cURL PHP Extension
+- DOM PHP Extension
+- Fileinfo PHP Extension
+- Filter PHP Extension
+- GD PHP Extension (for image processing)
+- Hash PHP Extension
+- Mbstring PHP Extension
+- OpenSSL PHP Extension
+- PCRE PHP Extension
+- PDO PHP Extension
+- Session PHP Extension
+- Tokenizer PHP Extension
+- XML PHP Extension
+- Zip PHP Extension
+
+### Server Requirements
 - 2GB RAM minimum (4GB recommended)
 - 1GB disk space minimum
+- Write permissions for `storage/` and `bootstrap/cache/` directories
+
+### Optional (for production)
+- Redis (for caching and queues)
+- Supervisor (for queue workers)
+- SSL certificate (for HTTPS)
 
 ## Installation
 
-### 1. Clone the Repository
+### Quick Start (Recommended)
+
+We provide automated setup scripts for easy installation:
+
+#### Linux/macOS:
+```bash
+git clone <repository-url>
+cd sweep
+chmod +x setup.sh
+./setup.sh
+```
+
+#### Windows:
+```cmd
+git clone <repository-url>
+cd sweep
+setup.bat
+```
+
+The automated script will check requirements, install dependencies, and set up the application.
+
+**See [QUICK_START.md](QUICK_START.md) for detailed quick start guide and troubleshooting.**
+
+### Manual Installation
+
+If you prefer manual setup:
+
+#### Prerequisites Check
+
+Before installation, verify your system meets all requirements:
+
+```bash
+# Check PHP version (should be 8.2+)
+php -v
+
+# Check Composer version
+composer --version
+
+# Check Node.js version (should be 18+)
+node -v
+
+# Check npm version
+npm -v
+
+# Check required PHP extensions
+php -m | grep -E "bcmath|ctype|curl|dom|fileinfo|filter|gd|hash|mbstring|openssl|pcre|pdo|session|tokenizer|xml|zip"
+```
+
+#### 1. Clone the Repository
 
 ```bash
 git clone <repository-url>
 cd sweep
 ```
 
-### 2. Install Dependencies
+#### 2. Install Dependencies
 
 ```bash
 # Install PHP dependencies
@@ -97,7 +181,7 @@ composer install
 npm install
 ```
 
-### 3. Environment Configuration
+#### 3. Environment Configuration
 
 ```bash
 # Copy environment file
@@ -107,7 +191,7 @@ cp .env.example .env
 php artisan key:generate
 ```
 
-### 4. Database Setup
+#### 4. Database Setup
 
 Configure your database connection in `.env`:
 
@@ -130,27 +214,27 @@ php artisan migrate
 php artisan db:seed
 ```
 
-### 5. Storage Setup
+#### 5. Storage Setup
 
 ```bash
 # Create symbolic link for storage
 php artisan storage:link
 
-# Set proper permissions
+# Set proper permissions (Linux/macOS)
 chmod -R 775 storage bootstrap/cache
 ```
 
-### 6. Build Assets
+#### 6. Build Assets
 
 ```bash
-# Development build
+# Development build with hot reload
 npm run dev
 
 # Production build
 npm run build
 ```
 
-### 7. Start Development Server
+#### 7. Start Development Server
 
 ```bash
 # Option 1: Using Laravel's built-in server
@@ -162,16 +246,16 @@ composer dev
 
 Visit `http://localhost:8000` in your browser.
 
-## Quick Setup Script
+### Alternative: Composer Setup Script
 
-For a streamlined setup, use the composer script:
+For a streamlined manual setup:
 
 ```bash
 composer setup
 ```
 
-This will:
-- Install all dependencies
+This composer script will:
+- Install all dependencies (PHP and JavaScript)
 - Copy .env.example to .env
 - Generate application key
 - Run migrations
