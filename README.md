@@ -227,23 +227,26 @@ MAIL_FROM_NAME="${APP_NAME}"
 
 ## Usage
 
-### Default Credentials
+### Default Test Accounts
 
-After seeding, you can log in with:
+After running database seeders (`php artisan db:seed`), you can log in with these test accounts:
 
-**Administrator**
-- Email: admin@sweep.local
-- Password: password
+#### Administrator Account
+- **Email**: `admin@sweep.local`
+- **Password**: `123123123`
+- **Access**: Full system administration, user management, analytics, and reporting
 
-**Collection Crew**
-- Email: crew@sweep.local
-- Password: password
+#### Collection Crew Account
+- **Email**: `john.smith@sweep.local`
+- **Password**: `123123123`
+- **Access**: View assigned routes, log collections, upload photos, track performance
 
-**Resident**
-- Email: resident@sweep.local
-- Password: password
+#### Resident Account
+- **Email**: `john.doe@example.com`
+- **Password**: `password`
+- **Access**: View collection schedules, submit reports, track issue status
 
-> **Important**: Change these credentials immediately in production!
+> **Security Warning**: These are test credentials for development only. Change all passwords immediately in production environments!
 
 ### Creating Users
 
