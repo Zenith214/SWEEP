@@ -5,6 +5,26 @@
         <x-admin-sidebar active="reports" />
     </x-slot>
 
+    @php
+        $breadcrumbItems = [];
+        if (request('return_url')) {
+            $breadcrumbItems[] = [
+                'label' => 'Dashboard',
+                'url' => request('return_url'),
+                'icon' => 'speedometer2'
+            ];
+        }
+        $breadcrumbItems[] = [
+            'label' => 'Resident Reports',
+            'url' => route('admin.reports.index'),
+            'icon' => 'file-text'
+        ];
+    @endphp
+
+    @if(count($breadcrumbItems) > 1)
+        <x-dashboard.breadcrumb :items="$breadcrumbItems" />
+    @endif
+
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h1 class="h2 mb-0">Resident Reports</h1>
     </div>

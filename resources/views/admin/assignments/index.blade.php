@@ -5,6 +5,26 @@
         <x-admin-sidebar active="assignments" />
     </x-slot>
 
+    @php
+        $breadcrumbItems = [];
+        if (request('return_url')) {
+            $breadcrumbItems[] = [
+                'label' => 'Dashboard',
+                'url' => request('return_url'),
+                'icon' => 'speedometer2'
+            ];
+        }
+        $breadcrumbItems[] = [
+            'label' => 'Assignment Management',
+            'url' => route('admin.assignments.index'),
+            'icon' => 'clipboard-check'
+        ];
+    @endphp
+
+    @if(count($breadcrumbItems) > 1)
+        <x-dashboard.breadcrumb :items="$breadcrumbItems" />
+    @endif
+
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h1 class="h2 mb-0">Assignment Management</h1>
         <div>

@@ -1,0 +1,472 @@
+/**
+ * Accessibility Enhancements for Dashboard
+ * Ensures WCAG 2.1 AA compliance
+ */
+
+/* ===================================
+   Color Contrast Enhancements
+   Ensures 4.5:1 contrast ratio for all text
+   =================================== */
+
+/* Primary text colors with enhanced contrast */
+.text-muted {
+    color: #5a5a5a !important; /* Enhanced from Bootstrap's default for better contrast */
+}
+
+.text-secondary {
+    color: #4a4a4a !important;
+}
+
+/* Card text contrast */
+.card-subtitle {
+    color: #5a5a5a !important;
+}
+
+.small.text-muted {
+    color: #5a5a5a !important;
+}
+
+/* Link contrast */
+a.text-muted:hover,
+a.text-muted:focus {
+    color: #2c2c2c !important;
+}
+
+/* Badge contrast enhancements */
+.badge.bg-secondary {
+    background-color: #4a4a4a !important;
+}
+
+.badge.bg-light {
+    background-color: #e0e0e0 !important;
+    color: #2c2c2c !important;
+}
+
+/* Alert text contrast */
+.alert {
+    color: #2c2c2c;
+}
+
+.alert-info {
+    background-color: #d1ecf1;
+    border-color: #bee5eb;
+    color: #0c5460;
+}
+
+.alert-warning {
+    background-color: #fff3cd;
+    border-color: #ffeaa7;
+    color: #856404;
+}
+
+/* ===================================
+   Focus Indicators
+   Clear visual indicators for keyboard users
+   =================================== */
+
+/* Global focus styles */
+*:focus {
+    outline: 2px solid #2e8b57 !important;
+    outline-offset: 2px !important;
+}
+
+/* Button focus */
+.btn:focus,
+.btn:focus-visible {
+    outline: 2px solid #2e8b57 !important;
+    outline-offset: 2px !important;
+    box-shadow: 0 0 0 0.25rem rgba(46, 139, 87, 0.25) !important;
+}
+
+/* Form control focus */
+.form-control:focus,
+.form-select:focus {
+    border-color: #2e8b57 !important;
+    box-shadow: 0 0 0 0.25rem rgba(46, 139, 87, 0.25) !important;
+    outline: 2px solid #2e8b57 !important;
+    outline-offset: 0 !important;
+}
+
+/* Card focus (for clickable cards) */
+.card:focus,
+.card[tabindex]:focus {
+    outline: 2px solid #2e8b57 !important;
+    outline-offset: 2px !important;
+    box-shadow: 0 0.5rem 1rem rgba(46, 139, 87, 0.25) !important;
+}
+
+/* List item focus */
+.list-group-item:focus,
+.list-group-item-action:focus {
+    outline: 2px solid #2e8b57 !important;
+    outline-offset: -2px !important;
+    z-index: 2;
+}
+
+/* Table row focus */
+tr[tabindex]:focus {
+    outline: 2px solid #2e8b57 !important;
+    outline-offset: -2px !important;
+    background-color: rgba(46, 139, 87, 0.1) !important;
+}
+
+/* Dropdown focus */
+.dropdown-item:focus {
+    background-color: rgba(46, 139, 87, 0.1) !important;
+    outline: 2px solid #2e8b57 !important;
+    outline-offset: -2px !important;
+}
+
+/* Link focus */
+a:focus {
+    outline: 2px solid #2e8b57 !important;
+    outline-offset: 2px !important;
+    text-decoration: underline !important;
+}
+
+/* Skip to content link */
+.skip-to-content {
+    position: absolute;
+    top: -40px;
+    left: 0;
+    background: #2e8b57;
+    color: white;
+    padding: 8px 16px;
+    text-decoration: none;
+    z-index: 10000;
+    border-radius: 0 0 4px 0;
+}
+
+.skip-to-content:focus {
+    top: 0;
+    outline: 2px solid #fff !important;
+    outline-offset: -2px !important;
+}
+
+/* ===================================
+   Keyboard Navigation Enhancements
+   =================================== */
+
+/* Indicate clickable elements */
+[role="button"],
+[onclick],
+.cursor-pointer {
+    cursor: pointer;
+}
+
+[role="button"]:focus,
+[onclick]:focus,
+.cursor-pointer:focus {
+    outline: 2px solid #2e8b57 !important;
+    outline-offset: 2px !important;
+}
+
+/* Table header sorting indicators */
+th.sortable {
+    cursor: pointer;
+    user-select: none;
+    position: relative;
+}
+
+th.sortable:focus {
+    background-color: rgba(46, 139, 87, 0.1) !important;
+}
+
+th.sortable:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+/* ===================================
+   Screen Reader Enhancements
+   =================================== */
+
+/* Visually hidden but accessible to screen readers */
+.sr-only,
+.visually-hidden {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
+}
+
+/* Focusable when navigated to via keyboard */
+.sr-only-focusable:focus,
+.visually-hidden-focusable:focus {
+    position: static !important;
+    width: auto !important;
+    height: auto !important;
+    padding: inherit !important;
+    margin: inherit !important;
+    overflow: visible !important;
+    clip: auto !important;
+    white-space: normal !important;
+}
+
+/* ===================================
+   Responsive Design Enhancements
+   =================================== */
+
+/* Touch-friendly tap targets (minimum 44x44px) */
+@media (max-width: 768px) {
+    .btn,
+    .form-control,
+    .form-select,
+    a,
+    button {
+        min-height: 44px;
+        padding: 12px 16px;
+    }
+    
+    .btn-sm {
+        min-height: 44px;
+        padding: 10px 14px;
+    }
+    
+    /* Larger touch targets for icons */
+    .bi {
+        font-size: 1.25rem;
+    }
+    
+    /* Improved spacing for mobile */
+    .card {
+        margin-bottom: 1rem;
+    }
+    
+    /* Stack metric cards on mobile */
+    .metric-card {
+        margin-bottom: 1rem;
+    }
+    
+    /* Horizontal scroll for tables */
+    .table-responsive {
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    /* Ensure dropdown menus are accessible on mobile */
+    .dropdown-menu {
+        max-width: 90vw;
+    }
+    
+    /* Improve modal accessibility on mobile */
+    .modal-dialog {
+        margin: 0.5rem;
+    }
+    
+    /* Better chart visibility on mobile */
+    .chart-container {
+        min-height: 250px;
+    }
+    
+    /* Collapsible widgets on mobile */
+    .card-header {
+        cursor: pointer;
+    }
+    
+    /* Improve alert panel on mobile */
+    .alert-panel .list-group {
+        max-height: 300px !important;
+    }
+}
+
+/* Tablet optimizations */
+@media (min-width: 769px) and (max-width: 1024px) {
+    /* Optimize grid layout for tablets */
+    .col-md-6 {
+        flex: 0 0 50%;
+        max-width: 50%;
+    }
+    
+    /* Better chart sizing on tablets */
+    .chart-container {
+        min-height: 300px;
+    }
+}
+
+/* Large screen optimizations */
+@media (min-width: 1400px) {
+    /* Optimize dashboard layout for large screens */
+    .container-fluid {
+        max-width: 1920px;
+        margin: 0 auto;
+    }
+    
+    /* Better spacing for large screens */
+    .main-content {
+        padding: 2.5rem;
+    }
+}
+
+/* ===================================
+   High Contrast Mode Support
+   =================================== */
+
+@media (prefers-contrast: high) {
+    .card {
+        border: 2px solid #000 !important;
+    }
+    
+    .btn {
+        border: 2px solid currentColor !important;
+    }
+    
+    .text-muted {
+        color: #000 !important;
+    }
+}
+
+/* ===================================
+   Reduced Motion Support
+   =================================== */
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+    
+    .metric-card-clickable {
+        transition: none !important;
+    }
+    
+    .spinner-border {
+        animation: none !important;
+        border-left-color: transparent !important;
+    }
+}
+
+/* ===================================
+   Print Styles
+   =================================== */
+
+@media print {
+    /* Hide interactive elements */
+    .btn,
+    button,
+    .dropdown,
+    .skip-to-content {
+        display: none !important;
+    }
+    
+    /* Ensure good contrast for printing */
+    body {
+        color: #000 !important;
+        background: #fff !important;
+    }
+    
+    .card {
+        border: 1px solid #000 !important;
+        page-break-inside: avoid;
+    }
+    
+    /* Show URLs for links */
+    a[href]:after {
+        content: " (" attr(href) ")";
+    }
+}
+
+/* ===================================
+   Chart Accessibility
+   =================================== */
+
+/* Chart container focus */
+.chart-container:focus-within {
+    outline: 2px solid #2e8b57 !important;
+    outline-offset: 2px !important;
+}
+
+/* Chart canvas focus */
+canvas:focus {
+    outline: 2px solid #2e8b57 !important;
+    outline-offset: 2px !important;
+}
+
+/* ===================================
+   Loading States
+   =================================== */
+
+/* Loading spinner with proper contrast */
+.spinner-border {
+    border-color: rgba(46, 139, 87, 0.25);
+    border-right-color: #2e8b57;
+}
+
+/* Loading overlay */
+.loading-overlay {
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+.loading-overlay .spinner-border {
+    border-color: rgba(255, 255, 255, 0.25);
+    border-right-color: #fff;
+}
+
+/* ===================================
+   Error States
+   =================================== */
+
+/* Error messages with proper contrast */
+.alert-danger {
+    background-color: #f8d7da;
+    border-color: #f5c2c7;
+    color: #842029;
+}
+
+.text-danger {
+    color: #842029 !important;
+}
+
+/* ===================================
+   Success States
+   =================================== */
+
+.alert-success {
+    background-color: #d1e7dd;
+    border-color: #badbcc;
+    color: #0f5132;
+}
+
+.text-success {
+    color: #0f5132 !important;
+}
+
+/* ===================================
+   Custom Scrollbar (Accessibility-friendly)
+   =================================== */
+
+/* For Webkit browsers */
+::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 6px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+::-webkit-scrollbar-thumb:focus {
+    outline: 2px solid #2e8b57;
+}
+
+/* For Firefox */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: #888 #f1f1f1;
+}

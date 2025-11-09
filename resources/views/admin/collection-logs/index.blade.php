@@ -5,6 +5,26 @@
         <x-admin-sidebar active="collection-logs" />
     </x-slot>
 
+    @php
+        $breadcrumbItems = [];
+        if (request('return_url')) {
+            $breadcrumbItems[] = [
+                'label' => 'Dashboard',
+                'url' => request('return_url'),
+                'icon' => 'speedometer2'
+            ];
+        }
+        $breadcrumbItems[] = [
+            'label' => 'Collection Logs',
+            'url' => route('admin.collection-logs.index'),
+            'icon' => 'file-text'
+        ];
+    @endphp
+
+    @if(count($breadcrumbItems) > 1)
+        <x-dashboard.breadcrumb :items="$breadcrumbItems" />
+    @endif
+
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h1 class="h2 mb-0">
             <i class="bi bi-file-text"></i> Collection Logs

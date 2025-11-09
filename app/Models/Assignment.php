@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Builder;
 use Carbon\Carbon;
 
@@ -75,6 +77,14 @@ class Assignment extends Model
     public function recyclingLogs(): HasMany
     {
         return $this->hasMany(RecyclingLog::class);
+    }
+
+    /**
+     * Get the collection log for this assignment.
+     */
+    public function collectionLog(): HasOne
+    {
+        return $this->hasOne(CollectionLog::class);
     }
 
     /**

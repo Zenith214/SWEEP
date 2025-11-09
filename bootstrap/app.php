@@ -16,6 +16,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'role' => \App\Http\Middleware\EnsureUserHasRole::class,
             'rate.limit.login' => \App\Http\Middleware\RateLimitLogin::class,
             'ensure.log.editable' => \App\Http\Middleware\EnsureLogIsEditable::class,
+            'track.dashboard.performance' => \App\Http\Middleware\TrackDashboardPerformance::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

@@ -12,6 +12,9 @@
         
         <!-- Bootstrap Icons -->
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+        
+        <!-- Accessibility Styles -->
+        <link rel="stylesheet" href="{{ asset('css/accessibility.css') }}">
 
         <!-- Custom Styles -->
         <style>
@@ -126,8 +129,11 @@
         @stack('styles')
     </head>
     <body>
+        <!-- Skip to main content link for keyboard users -->
+        <a href="#main-content" class="skip-to-content visually-hidden-focusable">Skip to main content</a>
+        
         <!-- Navigation -->
-        <nav class="navbar navbar-expand-lg navbar-dark">
+        <nav class="navbar navbar-expand-lg navbar-dark" role="navigation" aria-label="Main navigation">
             <div class="container-fluid">
                 <a class="navbar-brand" href="{{ route('dashboard') }}">
                     <i class="bi bi-recycle"></i> SWEEP
@@ -168,7 +174,10 @@
                         {{ $sidebar }}
                     </nav>
                     <!-- Main Content Area -->
-                    <main class="col-md-9 col-lg-10 main-content">
+                    <main id="main-content" class="col-md-9 col-lg-10 main-content" role="main" tabindex="-1">
+                        <!-- Breadcrumb Navigation -->
+                        <nav aria-label="Breadcrumb" id="breadcrumb-container" style="display: none;"></nav>
+
                         @if(session('success'))
                             <div class="alert alert-success alert-dismissible fade show" role="alert">
                                 <i class="bi bi-check-circle-fill"></i> {{ session('success') }}
@@ -202,6 +211,9 @@
                 @else
                     <!-- Full Width Content -->
                     <main class="col-12 main-content">
+                        <!-- Breadcrumb Navigation -->
+                        <div id="breadcrumb-container" style="display: none;"></div>
+
                         @if(session('success'))
                             <div class="alert alert-success alert-dismissible fade show" role="alert">
                                 <i class="bi bi-check-circle-fill"></i> {{ session('success') }}
@@ -239,8 +251,23 @@
         <!-- Bootstrap 5 JS Bundle -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
         
+        <!-- Alpine.js -->
+        <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.13.3/dist/cdn.min.js"></script>
+        
+        <!-- Chart.js -->
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+        
         <!-- SWEEP Error Handling Utilities -->
         <script src="{{ asset('js/error-handling.js') }}"></script>
+        
+        <!-- Dashboard Navigation and Context Preservation -->
+        <script src="{{ asset('js/dashboard-navigation.js') }}"></script>
+        
+        <!-- Dashboard Charts -->
+        <script src="{{ asset('js/dashboard-charts.js') }}"></script>
+        
+        <!-- Accessibility Helper -->
+        <script src="{{ asset('js/accessibility-helper.js') }}"></script>
         
         @stack('scripts')
     </body>

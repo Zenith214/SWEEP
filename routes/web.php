@@ -31,8 +31,8 @@ use Illuminate\Support\Facades\Route;
 
 // Public routes
 Route::get('/', function () {
-    return view('welcome');
-});
+    return view('landing');
+})->name('landing');
 
 /*
 |--------------------------------------------------------------------------
@@ -97,6 +97,34 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/resident/dashboard', [DashboardController::class, 'residentDashboard'])
         ->middleware('role:resident,administrator')
         ->name('resident.dashboard');
+    
+    // Dashboard analytics endpoints
+    Route::get('/dashboard/metrics', [DashboardController::class, 'getMetrics'])
+        ->name('dashboard.metrics');
+    
+    Route::get('/dashboard/export', [DashboardController::class, 'export'])
+        ->name('dashboard.export');
+    
+    Route::post('/dashboard/preferences', [DashboardController::class, 'savePreferences'])
+        ->name('dashboard.preferences.save');
+    
+    Route::get('/dashboard/drill-down/{metric}', [DashboardController::class, 'drillDown'])
+        ->name('dashboard.drill-down');
+    
+    // Alert management endpoints
+    Route::post('/dashboard/alerts/{alertId}/dismiss', [DashboardController::class, 'dismissAlertById'])
+        ->name('dashboard.alerts.dismiss');
+    
+    Route::post('/dashboard/alerts/dismiss-all', [DashboardController::class, 'dismissAllAlertsAction'])
+        ->name('dashboard.alerts.dismiss-all');
+    
+    // Chart data endpoint for AJAX refresh
+    Route::get('/dashboard/chart-data/{metricType}', [DashboardController::class, 'getChartData'])
+        ->name('dashboard.chart-data');
+    
+    // Geographic distribution endpoint
+    Route::get('/dashboard/geographic-distribution', [DashboardController::class, 'geographicDistribution'])
+        ->name('dashboard.geographic-distribution');
 });
 
 /*
@@ -199,6 +227,12 @@ Route::middleware(['auth', 'role:administrator'])->prefix('admin')->name('admin.
     Route::post('recycling/targets', [\App\Http\Controllers\Admin\RecyclingTargetController::class, 'store'])->name('recycling.targets.store');
     Route::put('recycling/targets/{recyclingTarget}', [\App\Http\Controllers\Admin\RecyclingTargetController::class, 'update'])->name('recycling.targets.update');
     Route::delete('recycling/targets/{recyclingTarget}', [\App\Http\Controllers\Admin\RecyclingTargetController::class, 'destroy'])->name('recycling.targets.destroy');
+    
+    // Scheduled report management routes
+    Route::resource('scheduled-reports', \App\Http\Controllers\ScheduledReportController::class);
+    Route::patch('scheduled-reports/{scheduledReport}/toggle', [\App\Http\Controllers\ScheduledReportController::class, 'toggleActive'])->name('scheduled-reports.toggle');
+    Route::get('reports/{generatedReport}/download', [\App\Http\Controllers\ScheduledReportController::class, 'download'])->name('reports.download');
+    Route::delete('reports/{generatedReport}/delete', [\App\Http\Controllers\ScheduledReportController::class, 'deleteGenerated'])->name('reports.delete-generated');
 });
 
 /*

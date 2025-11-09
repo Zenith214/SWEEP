@@ -46,6 +46,9 @@
     <a class="nav-link {{ $active === 'recycling-targets' ? 'active' : '' }}" href="{{ route('admin.recycling.targets.index') }}">
         <i class="bi bi-bullseye"></i> Recycling Targets
     </a>
+    <a class="nav-link {{ $active === 'scheduled-reports' ? 'active' : '' }}" href="{{ route('admin.scheduled-reports.index') }}">
+        <i class="bi bi-clock-history"></i> Scheduled Reports
+    </a>
     <hr>
     <a class="nav-link" href="{{ route('profile.edit') }}">
         <i class="bi bi-gear"></i> Settings

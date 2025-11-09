@@ -5,6 +5,7 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -63,6 +64,46 @@ class User extends Authenticatable
     public function recyclingLogs(): HasMany
     {
         return $this->hasMany(RecyclingLog::class);
+    }
+
+    /**
+     * Get the dashboard preferences for the user.
+     */
+    public function dashboardPreference(): HasOne
+    {
+        return $this->hasOne(DashboardPreference::class);
+    }
+
+    /**
+     * Get the scheduled reports for the user.
+     */
+    public function scheduledReports(): HasMany
+    {
+        return $this->hasMany(ScheduledReport::class);
+    }
+
+    /**
+     * Get the reports submitted by the user (for residents).
+     */
+    public function reports(): HasMany
+    {
+        return $this->hasMany(Report::class, 'resident_id');
+    }
+
+    /**
+     * Get the collection logs created by the user (for crew members).
+     */
+    public function collectionLogs(): HasMany
+    {
+        return $this->hasMany(CollectionLog::class, 'created_by');
+    }
+
+    /**
+     * Get the assignments for the user (for crew members).
+     */
+    public function assignments(): HasMany
+    {
+        return $this->hasMany(Assignment::class);
     }
 
     /**
