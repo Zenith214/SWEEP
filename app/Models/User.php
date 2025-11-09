@@ -58,6 +58,14 @@ class User extends Authenticatable
     }
 
     /**
+     * Get the recycling logs for the user.
+     */
+    public function recyclingLogs(): HasMany
+    {
+        return $this->hasMany(RecyclingLog::class);
+    }
+
+    /**
      * Get the dashboard route based on user role.
      */
     public function getDashboardRoute(): string

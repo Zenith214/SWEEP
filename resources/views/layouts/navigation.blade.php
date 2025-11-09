@@ -15,6 +15,36 @@
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
+                    
+                    @role('resident')
+                        <x-nav-link :href="route('resident.reports')" :active="request()->routeIs('resident.reports*')">
+                            {{ __('My Reports') }}
+                        </x-nav-link>
+                    @endrole
+                    
+                    @role('collection_crew')
+                        <x-nav-link :href="route('crew.recycling-logs.index')" :active="request()->routeIs('crew.recycling-logs.*')">
+                            {{ __('Recycling Logs') }}
+                        </x-nav-link>
+                    @endrole
+                    
+                    @role('administrator')
+                        <x-nav-link :href="route('admin.reports.index')" :active="request()->routeIs('admin.reports.*')">
+                            {{ __('Reports') }}
+                        </x-nav-link>
+                        <x-nav-link :href="route('admin.analytics.reports.index')" :active="request()->routeIs('admin.analytics.reports.*')">
+                            {{ __('Report Analytics') }}
+                        </x-nav-link>
+                        <x-nav-link :href="route('admin.recycling-logs.index')" :active="request()->routeIs('admin.recycling-logs.*')">
+                            {{ __('Recycling Logs') }}
+                        </x-nav-link>
+                        <x-nav-link :href="route('admin.recycling.analytics.dashboard')" :active="request()->routeIs('admin.recycling.analytics.*')">
+                            {{ __('Recycling Analytics') }}
+                        </x-nav-link>
+                        <x-nav-link :href="route('admin.recycling.targets.index')" :active="request()->routeIs('admin.recycling.targets.*')">
+                            {{ __('Recycling Targets') }}
+                        </x-nav-link>
+                    @endrole
                 </div>
             </div>
 
@@ -70,6 +100,36 @@
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
+            
+            @role('resident')
+                <x-responsive-nav-link :href="route('resident.reports')" :active="request()->routeIs('resident.reports*')">
+                    {{ __('My Reports') }}
+                </x-responsive-nav-link>
+            @endrole
+            
+            @role('collection_crew')
+                <x-responsive-nav-link :href="route('crew.recycling-logs.index')" :active="request()->routeIs('crew.recycling-logs.*')">
+                    {{ __('Recycling Logs') }}
+                </x-responsive-nav-link>
+            @endrole
+            
+            @role('administrator')
+                <x-responsive-nav-link :href="route('admin.reports.index')" :active="request()->routeIs('admin.reports.*')">
+                    {{ __('Reports') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('admin.analytics.reports.index')" :active="request()->routeIs('admin.analytics.reports.*')">
+                    {{ __('Report Analytics') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('admin.recycling-logs.index')" :active="request()->routeIs('admin.recycling-logs.*')">
+                    {{ __('Recycling Logs') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('admin.recycling.analytics.dashboard')" :active="request()->routeIs('admin.recycling.analytics.*')">
+                    {{ __('Recycling Analytics') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('admin.recycling.targets.index')" :active="request()->routeIs('admin.recycling.targets.*')">
+                    {{ __('Recycling Targets') }}
+                </x-responsive-nav-link>
+            @endrole
         </div>
 
         <!-- Responsive Settings Options -->

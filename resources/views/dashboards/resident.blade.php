@@ -9,11 +9,11 @@
             <a class="nav-link" href="{{ route('resident.schedules') }}">
                 <i class="bi bi-calendar3"></i> My Schedule
             </a>
-            <a class="nav-link text-muted" href="#">
-                <i class="bi bi-file-earmark-plus"></i> Submit Report <small>(Coming Soon)</small>
+            <a class="nav-link" href="{{ route('resident.reports.create') }}">
+                <i class="bi bi-file-earmark-plus"></i> Submit Report
             </a>
-            <a class="nav-link text-muted" href="#">
-                <i class="bi bi-list-check"></i> My Reports <small>(Coming Soon)</small>
+            <a class="nav-link" href="{{ route('resident.reports') }}">
+                <i class="bi bi-list-check"></i> My Reports
             </a>
             <hr>
             <a class="nav-link" href="{{ route('profile.edit') }}">
@@ -65,10 +65,12 @@
         <div class="col-md-4">
             <div class="card h-100">
                 <div class="card-body text-center">
-                    <i class="bi bi-file-earmark-plus text-secondary fs-1 mb-3"></i>
+                    <i class="bi bi-file-earmark-plus fs-1 mb-3" style="color: var(--sweep-accent);"></i>
                     <h5 class="card-title">Submit Report</h5>
                     <p class="card-text text-muted">Report missed collections or issues</p>
-                    <button class="btn btn-outline-secondary" disabled>Coming Soon</button>
+                    <a href="{{ route('resident.reports.create') }}" class="btn btn-primary">
+                        <i class="bi bi-plus-circle"></i> Submit Report
+                    </a>
                 </div>
             </div>
         </div>
@@ -76,10 +78,12 @@
         <div class="col-md-4">
             <div class="card h-100">
                 <div class="card-body text-center">
-                    <i class="bi bi-list-check text-secondary fs-1 mb-3"></i>
+                    <i class="bi bi-list-check fs-1 mb-3" style="color: var(--sweep-primary);"></i>
                     <h5 class="card-title">My Reports</h5>
                     <p class="card-text text-muted">View your submitted reports</p>
-                    <button class="btn btn-outline-secondary" disabled>Coming Soon</button>
+                    <a href="{{ route('resident.reports') }}" class="btn btn-primary">
+                        <i class="bi bi-eye"></i> View Reports
+                    </a>
                 </div>
             </div>
         </div>

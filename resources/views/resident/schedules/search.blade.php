@@ -9,11 +9,11 @@
             <a class="nav-link active" href="{{ route('resident.schedules') }}">
                 <i class="bi bi-calendar3"></i> My Schedule
             </a>
-            <a class="nav-link text-muted" href="#">
-                <i class="bi bi-file-earmark-plus"></i> Submit Report <small>(Coming Soon)</small>
+            <a class="nav-link" href="{{ route('resident.reports.create') }}">
+                <i class="bi bi-file-earmark-plus"></i> Submit Report
             </a>
-            <a class="nav-link text-muted" href="#">
-                <i class="bi bi-list-check"></i> My Reports <small>(Coming Soon)</small>
+            <a class="nav-link" href="{{ route('resident.reports') }}">
+                <i class="bi bi-list-check"></i> My Reports
             </a>
             <hr>
             <a class="nav-link" href="{{ route('profile.edit') }}">

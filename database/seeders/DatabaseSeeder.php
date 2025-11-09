@@ -28,6 +28,9 @@ class DatabaseSeeder extends Seeder
             CollectionLogSeeder::class,
             CollectionPhotoSeeder::class,
             AdminNoteSeeder::class,
+            ReportSeeder::class,
+            RecyclingLogSeeder::class,
+            RecyclingTargetSeeder::class,
         ]);
     }
 }

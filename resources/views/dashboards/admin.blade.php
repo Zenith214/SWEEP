@@ -33,11 +33,20 @@
             <a class="nav-link" href="{{ route('admin.analytics.collections.index') }}">
                 <i class="bi bi-graph-up"></i> Collection Analytics
             </a>
-            <a class="nav-link text-muted" href="#">
-                <i class="bi bi-file-text"></i> Reports <small>(Coming Soon)</small>
+            <a class="nav-link" href="{{ route('admin.reports.index') }}">
+                <i class="bi bi-file-text"></i> Reports
             </a>
-            <a class="nav-link text-muted" href="#">
-                <i class="bi bi-recycle"></i> Recycling <small>(Coming Soon)</small>
+            <a class="nav-link" href="{{ route('admin.analytics.reports.index') }}">
+                <i class="bi bi-bar-chart"></i> Report Analytics
+            </a>
+            <a class="nav-link {{ request()->routeIs('admin.recycling-logs.*') ? 'active' : '' }}" href="{{ route('admin.recycling-logs.index') }}">
+                <i class="bi bi-recycle"></i> All Recycling Logs
+            </a>
+            <a class="nav-link {{ request()->routeIs('admin.recycling.analytics.*') ? 'active' : '' }}" href="{{ route('admin.recycling.analytics.dashboard') }}">
+                <i class="bi bi-graph-up"></i> Recycling Analytics
+            </a>
+            <a class="nav-link {{ request()->routeIs('admin.recycling.targets.*') ? 'active' : '' }}" href="{{ route('admin.recycling.targets.index') }}">
+                <i class="bi bi-bullseye"></i> Recycling Targets
             </a>
             <hr>
             <a class="nav-link" href="{{ route('profile.edit') }}">
@@ -161,11 +170,11 @@
                             </a>
                         </div>
                         <div class="col-md-6">
-                            <button class="btn btn-outline-secondary w-100 py-3" disabled>
+                            <a href="{{ route('admin.reports.index') }}" class="btn btn-outline-primary w-100 py-3">
                                 <i class="bi bi-file-text fs-4 d-block mb-2"></i>
                                 <strong>View Reports</strong>
-                                <div class="small text-muted">Coming Soon</div>
-                            </button>
+                                <div class="small text-muted">Manage resident reports</div>
+                            </a>
                         </div>
                     </div>
                 </div>

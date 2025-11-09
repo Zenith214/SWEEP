@@ -2,33 +2,7 @@
 
 <x-app-layout>
     <x-slot name="sidebar">
-        <div class="nav flex-column">
-            <a class="nav-link" href="{{ route('dashboard') }}">
-                <i class="bi bi-speedometer2"></i> Dashboard
-            </a>
-            <a class="nav-link" href="{{ route('crew.schedules') }}">
-                <i class="bi bi-calendar-check"></i> Today's Routes
-            </a>
-            <a class="nav-link" href="{{ route('crew.schedules.upcoming') }}">
-                <i class="bi bi-calendar3"></i> Upcoming Routes
-            </a>
-            <a class="nav-link" href="{{ route('crew.assignments') }}">
-                <i class="bi bi-clipboard-check"></i> My Assignment
-            </a>
-            <a class="nav-link" href="{{ route('crew.assignments.upcoming') }}">
-                <i class="bi bi-calendar-week"></i> Upcoming Assignments
-            </a>
-            <a class="nav-link active" href="{{ route('crew.collections') }}">
-                <i class="bi bi-clipboard-check"></i> Log Collection
-            </a>
-            <a class="nav-link" href="{{ route('crew.collections.history') }}">
-                <i class="bi bi-clock-history"></i> Collection History
-            </a>
-            <hr>
-            <a class="nav-link" href="{{ route('profile.edit') }}">
-                <i class="bi bi-gear"></i> Settings
-            </a>
-        </div>
+        <x-crew-sidebar active="collections" />
     </x-slot>
 
     <div class="container-fluid">

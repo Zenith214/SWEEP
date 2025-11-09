@@ -59,6 +59,14 @@ class Route extends Model
     }
 
     /**
+     * Get the recycling logs for the route.
+     */
+    public function recyclingLogs(): HasMany
+    {
+        return $this->hasMany(RecyclingLog::class);
+    }
+
+    /**
      * Check if the route has active schedules.
      */
     public function hasActiveSchedules(): bool

@@ -70,6 +70,14 @@ class Assignment extends Model
     }
 
     /**
+     * Get the recycling logs for this assignment.
+     */
+    public function recyclingLogs(): HasMany
+    {
+        return $this->hasMany(RecyclingLog::class);
+    }
+
+    /**
      * Scope to filter active assignments.
      */
     public function scopeActive(Builder $query): Builder

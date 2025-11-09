@@ -1,11 +1,15 @@
 <?php
 
+use App\Http\Controllers\AdminReportController;
 use App\Http\Controllers\AssignmentController;
 use App\Http\Controllers\CrewAssignmentController;
 use App\Http\Controllers\CrewScheduleController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HolidayController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\RecyclingLogController;
+use App\Http\Controllers\ReportAnalyticsController;
+use App\Http\Controllers\ResidentReportController;
 use App\Http\Controllers\ResidentScheduleController;
 use App\Http\Controllers\RouteController;
 use App\Http\Controllers\ScheduleController;
@@ -161,6 +165,40 @@ Route::middleware(['auth', 'role:administrator'])->prefix('admin')->name('admin.
     Route::get('analytics/collections/status-breakdown', [\App\Http\Controllers\CollectionAnalyticsController::class, 'getStatusBreakdown'])->name('analytics.collections.status-breakdown');
     Route::get('analytics/collections/crew-performance', [\App\Http\Controllers\CollectionAnalyticsController::class, 'getCrewPerformance'])->name('analytics.collections.crew-performance');
     Route::get('analytics/collections/route-performance', [\App\Http\Controllers\CollectionAnalyticsController::class, 'getRoutePerformance'])->name('analytics.collections.route-performance');
+    
+    // Report management routes
+    Route::get('reports', [AdminReportController::class, 'index'])->name('reports.index');
+    Route::get('reports/{report}', [AdminReportController::class, 'show'])->name('reports.show');
+    Route::patch('reports/{report}/status', [AdminReportController::class, 'updateStatus'])->name('reports.update-status');
+    Route::post('reports/{report}/responses', [AdminReportController::class, 'addResponse'])->name('reports.add-response');
+    Route::patch('reports/{report}/assign', [AdminReportController::class, 'assign'])->name('reports.assign');
+    Route::patch('reports/{report}/unassign', [AdminReportController::class, 'unassign'])->name('reports.unassign');
+    
+    // Report analytics routes
+    Route::get('analytics/reports', [ReportAnalyticsController::class, 'index'])->name('analytics.reports.index');
+    Route::get('analytics/reports/location', [ReportAnalyticsController::class, 'locationAnalysis'])->name('analytics.reports.location');
+    Route::get('analytics/reports/type', [ReportAnalyticsController::class, 'typeAnalysis'])->name('analytics.reports.type');
+    Route::get('analytics/reports/type-distribution', [ReportAnalyticsController::class, 'getTypeDistribution'])->name('analytics.reports.type-distribution');
+    Route::get('analytics/reports/resolution-times', [ReportAnalyticsController::class, 'getResolutionTimes'])->name('analytics.reports.resolution-times');
+    Route::get('analytics/reports/status-trend', [ReportAnalyticsController::class, 'getStatusTrend'])->name('analytics.reports.status-trend');
+    
+    // Recycling log management routes
+    Route::get('recycling-logs', [\App\Http\Controllers\Admin\RecyclingLogController::class, 'index'])->name('recycling-logs.index');
+    Route::get('recycling-logs/{recyclingLog}', [\App\Http\Controllers\Admin\RecyclingLogController::class, 'show'])->name('recycling-logs.show');
+    Route::get('recycling-logs-export', [\App\Http\Controllers\Admin\RecyclingLogController::class, 'export'])->name('recycling-logs.export');
+    
+    // Recycling analytics routes
+    Route::get('recycling/analytics', [\App\Http\Controllers\Admin\RecyclingAnalyticsController::class, 'dashboard'])->name('recycling.analytics.dashboard');
+    Route::get('recycling/analytics/materials', [\App\Http\Controllers\Admin\RecyclingAnalyticsController::class, 'materialAnalysis'])->name('recycling.analytics.materials');
+    Route::get('recycling/analytics/zones', [\App\Http\Controllers\Admin\RecyclingAnalyticsController::class, 'zonePerformance'])->name('recycling.analytics.zones');
+    Route::get('recycling/analytics/trends', [\App\Http\Controllers\Admin\RecyclingAnalyticsController::class, 'trendAnalysis'])->name('recycling.analytics.trends');
+    Route::get('recycling/analytics/crew', [\App\Http\Controllers\Admin\RecyclingAnalyticsController::class, 'crewPerformance'])->name('recycling.analytics.crew');
+    
+    // Recycling target management routes
+    Route::get('recycling/targets', [\App\Http\Controllers\Admin\RecyclingTargetController::class, 'index'])->name('recycling.targets.index');
+    Route::post('recycling/targets', [\App\Http\Controllers\Admin\RecyclingTargetController::class, 'store'])->name('recycling.targets.store');
+    Route::put('recycling/targets/{recyclingTarget}', [\App\Http\Controllers\Admin\RecyclingTargetController::class, 'update'])->name('recycling.targets.update');
+    Route::delete('recycling/targets/{recyclingTarget}', [\App\Http\Controllers\Admin\RecyclingTargetController::class, 'destroy'])->name('recycling.targets.destroy');
 });
 
 /*
@@ -179,6 +217,13 @@ Route::middleware(['auth', 'role:resident'])->prefix('resident')->name('resident
     Route::get('schedules/search', [ResidentScheduleController::class, 'search'])->name('schedules.search');
     Route::get('schedules/calendar', [ResidentScheduleController::class, 'calendar'])->name('schedules.calendar');
     Route::get('schedules/calendar/data', [ResidentScheduleController::class, 'getCalendarData'])->name('schedules.calendar.data');
+    
+    // Report submission and tracking routes
+    Route::get('reports', [ResidentReportController::class, 'index'])->name('reports');
+    Route::get('reports/create', [ResidentReportController::class, 'create'])->name('reports.create');
+    Route::post('reports', [ResidentReportController::class, 'store'])->name('reports.store');
+    Route::get('reports/search', [ResidentReportController::class, 'search'])->name('reports.search');
+    Route::get('reports/{report}', [ResidentReportController::class, 'show'])->name('reports.show');
 });
 
 /*
@@ -218,4 +263,11 @@ Route::middleware(['auth', 'role:collection_crew,administrator'])->prefix('crew'
         ->name('collections.photos.upload');
     Route::delete('photos/{photo}', [\App\Http\Controllers\CollectionLogController::class, 'deletePhoto'])
         ->name('collections.photos.delete');
+    
+    // Recycling log routes
+    Route::get('recycling-logs', [\App\Http\Controllers\RecyclingLogController::class, 'index'])->name('recycling-logs.index');
+    Route::get('recycling-logs/create', [\App\Http\Controllers\RecyclingLogController::class, 'create'])->name('recycling-logs.create');
+    Route::post('recycling-logs', [\App\Http\Controllers\RecyclingLogController::class, 'store'])->name('recycling-logs.store');
+    Route::get('recycling-logs/{recyclingLog}/edit', [\App\Http\Controllers\RecyclingLogController::class, 'edit'])->name('recycling-logs.edit');
+    Route::put('recycling-logs/{recyclingLog}', [\App\Http\Controllers\RecyclingLogController::class, 'update'])->name('recycling-logs.update');
 });
